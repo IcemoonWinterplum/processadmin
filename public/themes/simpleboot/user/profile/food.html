@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>我的美食</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content="">
+    <include file="public@head"/>
+</head>
+
+<body class="body-white" id="top">
+<include file="public@nav" />
+
+<div class="container tc-main">
+    <div class="row" style="margin-top: 100px;">
+        <div class="col-md-3">
+            <include file="public@usernav" />
+        </div>
+        <div class="col-md-9">
+            <div class="tabs">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#one" data-toggle="tab"><i class="fa fa-star"></i> 我的收藏</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="one">
+                        <a class="list-group-item" href="{:cmf_url('user/profile/addfood')}"><i class="fa fa-comments-o fa-fw"></i> 添加美食</a>
+                        <br>
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>标题</th>
+                                <th>描述</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <volist name='list' id='vo'>
+
+                            <tr>
+                                <td>{$vo.id}</td>
+                                <td> <img src="http://{$Think.server.server_name}/upload/{$vo.img_head}" width="50px" ></td>
+                                <td>{$vo.description}</td>
+                                <td>
+                                    {$vo.create_time}
+                                </td>
+                            </tr>
+                            </volist>
+                            </tbody>
+                        </table>
+                        <div class="pagination">{$list->render()}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <include file="public@footer" />
+</div>
+<!-- /container -->
+<include file="public@scripts" />
+</body>
+</html>

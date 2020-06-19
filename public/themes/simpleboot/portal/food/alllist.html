@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1">
+    <title>{$site_info.site_name|default=''}</title>
+    <meta name="keywords" content="{$site_info.site_seo_keywords|default=''}"/>
+    <meta name="description" content="{$site_info.site_seo_description|default=''}">
+    <include file="public@head"/>
+    <script type="text/javascript" src="__TMPL__/public/assets/js/jquery-3.3.1.min.js"></script>
+    <!--<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>-->
+    <script type="text/javascript" src="__TMPL__/public/assets/js/main.js"></script>
+    <script type="text/javascript" src="__TMPL__/public/assets/js/wow.min.js"></script>
+    <script type="text/javascript" language="javascript" src="__TMPL__/public/assets/js/jquery-1.6.2.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="__TMPL__/public/assets/css/waterfall.css">
+    <link rel="stylesheet" type="text/css" href="__TMPL__/public/assets/css/font_u4qz1594lnixusor.css">
+    <link rel="stylesheet" href="__TMPL__/public/assets/css/style.css">
+    <link rel="stylesheet" href="__TMPL__/public/assets/css/normalize.css">
+    <link rel="stylesheet" href="__TMPL__/public/assets/css/detail_p.css">
+    <link rel="stylesheet" href="__TMPL__/public/assets/css/animate.min.css">
+    <hook name="before_head_end"/>
+</head>
+<body class="body-white">
+
+<!--头部导航-->
+<include file="public@wrap" />
+<!--头部视频播放区域-->
+<div class="search-bottom-wrap"  style="background-color:white">
+    <div class="search-box">
+        <div class="search-input">
+            <input type="text" placeholder="搜索" id="keywords">
+            <span id="search"><img src="{$Think.server.host_name}__TMPL__/public/assets/images/search.png" alt=""></span>
+        </div>
+    </div>
+</div>
+<!--医疗警报系统-->
+<div class="" style="background: white;width: 100%;float:left;">
+    <div style="width: 1300px;margin: auto">
+        <ul id="stage" style="width: 1300px;min-height: 500px">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+
+    </div>
+    <div id="more" style="text-align: center;width: 100%;margin: auto;float:left;cursor:pointer;margin-bottom: 30px;">点击添加更多...</div>
+</div>
+
+<!--底部-->
+<div class="" style="background: white;width: 100%;margin-top: 30px;float:left;">
+<div class="footer-wrap">
+    <div class="footer-container">
+        <div class="nav-footer">
+            <div class="footer-title">
+                公司
+            </div>
+            <div class="nav-footer-list footer-content">
+                <span>
+                    <a href="">产品</a>
+                </span>
+                <span>
+                    <a href="about.html">关于</a>
+                </span>
+                <span>
+                    <a href="">操作步骤</a>
+                </span>
+                <span>
+                    <a href="news.html">最新动态</a>
+                </span>
+                <span>
+                    <a href="buy.html">购买建议</a>
+                </span>
+            </div>
+        </div>
+        <div class="contact-box">
+            <div class="footer-title">
+                联系我们
+            </div>
+            <div class="footer-content">
+                <div>025-8888888</div>
+                <div>sdsxs@139.com</div>
+                <div>遂宁市大英县隆盛镇同心乡六村八社</div>
+            </div>
+            <div class="wechat">
+                <img src="{$Think.server.host_name}__TMPL__/public/assets/images/wechat.png" alt="">
+            </div>
+        </div>
+        <div class="copyright">
+            <strong>&copy遂宁市旅游局</strong>
+            <span>蜀ICP备17033338</span>
+            <span><a href="#">使用条款</a></span>
+            <span><a href="#">隐私声明</a></span>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<script type="text/javascript" src="__TMPL__/public/assets/js/vedio.js"></script>
+<script type="text/javascript">
+    new WOW().init();
+</script>
+<!-- /container -->
+<include file="public@scripts"/>
+<script src="__TMPL__/public/assets/js/slippry.min.js"></script>
+<script>
+    $(function () {
+        $("#home-slider").slippry({
+            transition: 'fade',
+            useCSS: true,
+            captions: false,
+            speed: 1000,
+            pause: 3000,
+            auto: true,
+            preload: 'visible'
+        });
+        $("#home-slider").show();
+
+        $(".main-user,.main_info").mouseover(function (){
+            $(".main_info").show();
+        }).mouseout(function (){
+            $(".main_info").hide();
+        });
+        $(".main-user").click(function(){
+            $(".main_info").show();
+        });
+    });
+
+    $(document).ready(function(){
+        loadMore();
+    });
+    var keywords=""
+    var page = 1;
+    $("#search").click(function () {
+        var data = $("#keywords").val()
+        $("#more").html("点击添加更多...")
+        con = true
+        keywords = data
+        $("#stage").html("<li></li>\n" +
+            "            <li></li>\n" +
+            "            <li></li>\n" +
+            "            <li></li>");
+        $.ajax({
+            url :"{:cmf_url('portal/food/pagelist')}",
+            data:{page:1,keywords:data},
+            dataType : 'json',
+            success : function(json)
+            {
+                if(typeof json == 'object')
+                {
+                    if(json.length == 0){
+                        //con = false;
+                        $("#more").html("您要的数据未查找到！")
+                        return false
+                    }
+                    page = 2;
+                    //page++;
+                    var oProduct, $row, iHeight, iTempHeight;
+                    for(var i=0, l=json.length; i<l; i++)
+                    {
+                        oProduct = json[i];
+                        // 找出当前高度最小的列, 新内容添加到该列
+                        iHeight = -1;
+                        $('#stage li').each(function(){
+                            iTempHeight = Number( $(this).height() );
+                            if(iHeight==-1 || iHeight>iTempHeight)
+                            {
+                                iHeight = iTempHeight;
+                                $row = $(this);
+                            }
+                        });
+
+                        $item = $("<a href='{:cmf_url('portal/food/fooddetail')}?id="+oProduct.id+"' target='_blank'>"+'<div><div style="border: 0;border-radius: 5px;"><img src="'+oProduct.img_head+'"  style="border-radius: 50%"   border="0"  width="280px"></div><div style="border:0;width: 300px;overflow: hidden">'+oProduct.name+'</div></div></a>').hide();
+
+                        $row.append($item);
+                        $item.fadeIn();
+                    }
+                }else{
+                    con =false;
+                }
+            }
+        });
+    })
+    var $document = $(document);//缓存一下$(document)
+    $(window).scroll(function(){
+        var $this = $(this),
+            scrollTop = $this.scrollTop(),
+            scrollHeight = $document.height(),
+            windowHeight = $this.height();
+        if(scrollTop + windowHeight >= scrollHeight){
+            loadMore();
+        }
+    });
+
+    var con = true;
+    $("#more").click(function () {
+        loadMore();
+    })
+    function loadMore()
+    {
+        //alert(page)
+        if(con == false){
+            return false;
+        }
+        $("#more").html("点击添加更多...")
+        $.ajax({
+            url :"{:cmf_url('portal/food/pagelist')}",
+            data:{page:page,keywords:keywords},
+            dataType : 'json',
+            success : function(json)
+            {
+                if(typeof json == 'object')
+                {
+
+                    if(json.length == 0){
+                        con = false;
+                        $("#more").html("没有更多了")
+                        return false
+                    }
+                    page++;
+                    var oProduct, $row, iHeight, iTempHeight;
+                    for(var i=0, l=json.length; i<l; i++)
+                    {
+                        oProduct = json[i];
+                        // 找出当前高度最小的列, 新内容添加到该列
+                        iHeight = -1;
+                        $('#stage li').each(function(){
+                            iTempHeight = Number( $(this).height() );
+                            if(iHeight==-1 || iHeight>iTempHeight)
+                            {
+                                iHeight = iTempHeight;
+                                $row = $(this);
+                            }
+                        });
+
+                        $item = $("<a href='{:cmf_url('portal/food/fooddetail')}?id="+oProduct.id+"' target='_blank'>"+'<div><div style="border: 0;border-radius: 5px;"><img src="'+oProduct.img_head+'"  style="border-radius: 50%"   border="0"  width="280px"></div><div style="border:0;width: 300px;overflow: hidden">'+oProduct.name+'</div></div></a>').hide();
+
+                        $row.append($item);
+                        $item.fadeIn();
+                    }
+                }else{
+                    con =false;
+                }
+            }
+        });
+    }
+</script>
+<hook name="before_body_end"/>
+</body>
+</html>

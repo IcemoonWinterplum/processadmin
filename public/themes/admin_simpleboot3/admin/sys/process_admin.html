@@ -1,0 +1,270 @@
+<include file="public@header"/>
+</head>
+<body>
+<td class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li <eq name="Request.param.start_status" value="1" >class="active" </eq>  <eq name="Request.param.start_status" value="" >class="active" </eq>><a href="{:url('Admin/sys/processAdmin',['start_status'=>1])}">进行中</a></li>
+        <li <eq name="Request.param.start_status" value="2" >class="active" </eq>><a href="{:url('Admin/sys/processAdmin',['start_status'=>2])}">已完成的流程</a></li>
+        <li <eq name="Request.param.start_status" value="3" >class="active" </eq>><a href="{:url('Admin/sys/processAdmin',['start_status'=>3])}">已取消</a></li>
+        <li <eq name="Request.param.start_status" value="5" >class="active" </eq>><a href="{:url('Admin/sys/processAdmin',['start_status'=>5])}">库存</a></li>
+        <li <eq name="Request.param.start_status" value="4" >class="active" </eq>><a href="{:url('Admin/sys/processAdmin',['start_status'=>4])}">暂停流程</a></li>
+       <!-- <li><a href="{:url('AdminPage/add')}">添加页面</a></li>-->
+    </ul>
+
+    <form class="well form-inline margin-top-20" method="post" action="{:url('admin/sys/processadmin')}">
+        内部订单号:
+        <input type="text" class="form-control" name="keyword" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="内部订单号">
+        Sku:
+        <input type="text" class="date" name="Sku" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="Sku">
+        <button class="btn btn-primary">搜索</button>
+    </form>
+    显示数量：<select id="count_show">
+    <option value="10" <eq name="Request.param.pagecount" value="10" >selected </eq>>10条</option>
+    <option value="20" <eq name="Request.param.pagecount" value="20" >selected </eq>>20条</option>
+    <option value="50" <eq name="Request.param.pagecount" value="50" >selected </eq>>50条</option>
+    <option value="100" <eq name="Request.param.pagecount" value="100" >selected </eq>>100条</option>
+</select>
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="{:lang('DELETE_CONFIRM_MESSAGE')}">{:lang('DELETE')}
+            </button>
+        </div>-->
+        <table class="table table-hover table-bordered table-list" id="content_process">
+            <thead>
+            <tr>
+                <!-- <th width="16">
+                     <label>
+                         <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                     </label>
+                 </th>-->
+                <th width="20">ID</th>
+                <th width="20">内部订单</th>
+                <th width="20">Sku</th>
+                <th width="60" >鞋面审单</th>
+                <th width="50" >开板</th>
+                <th width="50" >描版</th>
+                <th width="70">配料下料</th>
+                <!--<th width="50">下料</th>-->
+                <th width="50">配辅料</th>
+                <th width="50">做面</th>
+                <th width="50">鞋底审单</th>
+                <th width="50">3D</th>
+                <th width="50">开楦</th>
+                <th width="50">大底</th>
+                <th width="50">中底</th>
+             <!--   <th width="180" colspan="4" style="text-align: center;line-height: 40px">
+                   &lt;!&ndash; <div style="line-height: 20;text-align: center;width: 100%;float: left">鞋底审单</div>&ndash;&gt;
+                    <div style="text-align: center;width: 100%;float: left">
+                        <div style="text-align: center;width: 25%;float: left">3D</div>
+                        <div style="text-align: center;width: 25%;float: left">开楦</div>
+                        <div style="text-align: center;width: 25%;float: left">大底</div>
+                        <div style="text-align: center;width: 25%;float: left">中底</div>
+                    </div>
+                </th>-->
+                <th width="50">总配料</th>
+                <th width="50">做底</th>
+                <th width="50">打跟</th>
+                <th width="50">洗清洁</th>
+                <th width="50">品检</th>
+                <th width="50">包装</th>
+                <th width="50">交付</th>
+                <th width="50">状态</th>
+                <th width="40">加急</th>
+                <th width="40">操作</th>
+            </tr>
+            </thead>
+
+            <foreach name="pages" item="vo">
+                <tr>
+
+                    <td><a href="{:url('Admin/sys/processAlltask',['processid'=>$vo['id']])}">{$vo.id}</a></td>
+                    <td><a href="{:url('Admin/sys/ordershow',['orderid'=>$vo['ErpOrderDetailNo']])}">{$vo.ErpOrderDetailNo}</a></td>
+                    <td>{$vo.Sku}</td>
+                    <switch name="vo.examinePaper" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'examinePaper'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.openboard" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'openboard'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <case value="2"><td style="background: red;padding: 0px;">不需要</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.tracing" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'tracing'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <case value="2"><td style="background: red;padding: 0px;">不需要</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                        <switch name="vo.distributionBlanking" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'distributionBlanking'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                      <!--<switch name="vo.mixedIngredients" >
+                            <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'mixedIngredients'])}">完成</a></td></case>
+                            <case value="0"><td>未处理</td></case>
+                            <default /><td>未处理</td>
+                        </switch>-->
+                    <switch name="vo.accessories" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'mixedIngredients'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.makeFace" >
+                            <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'makeFace'])}">完成</a></td></case>
+                            <case value="0"><td>未处理</td></case>
+                            <default /><td>未处理</td>
+                        </switch>
+                    <!--鞋底审单-->
+                    <!--<switch name="vo.examinePaperbottom" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;">完成</td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>-->
+                    <switch name="vo.examinePaperbottom" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'examinePaperbottom'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <case value="2"><td style="background: red;padding: 0px;">不需要</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.threeD" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'threeD'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <case value="2"><td style="background: red;padding: 0px;">不需要</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.last" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'last'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <case value="2"><td style="background: red;padding: 0px;">不需要</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.outsole" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'outsole'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.midsole" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'midsole'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <!-------------------------------------------->
+                    <switch name="vo.totalmixedIngredients" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'totalmixedIngredients'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.makeBottom" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'makeBottom'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.drill" >
+                            <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'drill'])}">完成</a></td></case>
+                            <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                        </switch>
+                    <switch name="vo.stickingPad" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'stickingPad'])}">完成</a></td></case>
+                            <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                        </switch>
+                    <switch name="vo.inspection" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'inspection'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.packing" >
+                            <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'packing'])}">完成</a></td></case>
+                            <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                        </switch>
+                    <switch name="vo.deliver" >
+                            <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'deliver'])}">完成</a></td></case>
+                            <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                        </switch>
+                    <td>
+                        <select name="status" class="status">
+                            <option value="1"  <eq name="vo.start_status" value="1" >selected</eq> >开始</option>
+                            <option value="4"  <eq name="vo.start_status" value="4" >selected</eq> >暂停</option>
+                            <option value="2"  <eq name="vo.start_status" value="2" >selected</eq> >完成</option>
+                            <option value="3"  <eq name="vo.start_status" value="3" >selected</eq> >取消</option>
+                            <option value="5"  <eq name="vo.start_status" value="5" >selected</eq> >取消并存入库存</option>
+                        </select>
+                    </td>
+                    <td>{$vo.Urgent|default="否"}</td>
+                    <td>
+                        <switch name="vo.start_status" >
+                            <case value="4" break="1"> <a class="btn btn-xs btn-primary process_admin"  data="{$vo.id}" >修改</a></case>
+                            <case value="3" break="1"> </case>
+                            <case value="2" break="1"> <a class="btn btn-xs btn-primary process_admin"  data="{$vo.id}" >修改</a></case>
+                            <case value="1" break="1"> <a class="btn btn-xs btn-primary process_admin"  data="{$vo.id}" >修改</a></case>
+                        </switch>
+                        <neq name="vo.start_status" value="2" >
+
+                        </neq>
+                        <!--  <a class="btn btn-xs btn-danger js-ajax-delete" href="{:url('AdminPage/delete',array('id'=>$vo['id']))}">{:lang('DELETE')}</a>-->
+                    </td>
+                </tr>
+            </foreach>
+            <tr><td colspan="20"> <div class="pagination">{$pages->render()}</div></td><td colspan="4">总共：{$pages->total()}条</td></tr>
+        </table>
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="你确定删除吗？">{:lang('DELETE')}
+            </button>
+        </div>-->
+
+
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    window.onload = function () {
+        setInterval(function () {
+            var pagecount = $("#count_show").val();
+            $("#content_process").load(location.href + "&pagecount="+pagecount+ " #content_process");
+            //window.location.reload()
+        }, 60000)
+    }
+    $(function() {
+        $("#count_show").change(function(){
+            var pagecount = $(this).val();
+            $("#content_process").html("");
+            $("#content_process").load(location.href + "&pagecount="+pagecount+ " #content_process");
+        })
+        $(".process_admin").click(function () {
+
+            var obj = $(this)
+            var id = $(this).attr("data");
+            var start_status = $("#status").val();
+            var start_status = obj.parent().parent().find(".status").val()// $('.status option:selected').val();
+            if(!confirm("您确定要修改吗")){
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/processStatus')}",
+                data: {id:id,start_status:start_status},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert("修改完成");
+                        /* obj.parent().prev().html("完成")*/
+                    }else {
+                        alert(data.msg)
+                    }
+                }
+            });
+        })
+    });
+
+</script>
+</body>
+</html>

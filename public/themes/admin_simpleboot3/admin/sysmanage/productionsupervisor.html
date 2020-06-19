@@ -1,0 +1,36 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li  <empty name="Request.param.type">class="active"</empty>  ><a href="{:url('Admin/Sysmanage/ProductionSupervisor')}">待完成任务</a></li>
+        <li  <eq name="Request.param.type" value="2" >class="active" </eq> ><a href="{:url('Admin/Sysmanage/ProductionSupervisor',['type'=>1])}">已完成任务</a></li>
+        <li <eq name="Request.param.type" value="2" >class="active" </eq> ><a href="{:url('Admin/Sysmanage/ProductionSupervisor',['type'=>2])}">已取消订单任务</a></li>
+        <!-- <li><a href="{:url('Admin/Sysmanage/handlist')}">手工任务</a></li>-->
+        <li><a href="/">返回个人中心</a></li>
+    </ul>
+    <include file="admin@sysmanage/supervisor"/>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $(".myordersuer").click(function () {
+        var obj = $(this)
+        var id = $(this).attr("data");
+        $.ajax({
+            type: "POST",
+            url: "{:url('Admin/sys/finishorder')}",
+            data: {id:id},
+            dataType: "json",
+            success: function(data){
+                if (data.code == 200)
+                {
+                    obj.parent().prev().html("完成")
+                }else {
+                    alert(data.msg)
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>

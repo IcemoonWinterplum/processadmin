@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$food.name} {$food.name} {$food.name|default=''}</title>
+    <meta name="keywords" content="{$food.name},{$food.name|default=''}"/>
+    <meta name="description" content="{$food.name},{$food.name|default=''}">
+    <include file="public@head"/>
+    <hook name="before_head_end"/>
+</head>
+<body class="body-white">
+<include file="public@wrap"/>
+<div class="container">
+
+    <h2>{$food.name}</h2><br>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="">
+                <img src="http://{$Think.server.server_name}/upload/{$food.img_head}" />
+
+            </div>
+            <div class="pagination">
+                {$food.description}
+            </div>
+        </div>
+        <div class="col-md-3">
+
+            <div name="hottest_articles">
+                <div class=tc-box">{$food.description}=》</div>
+            </widget>
+
+
+            <widget name="last_articles">
+                <div class="tc-box">
+                    <div class="headtitle">
+                        <h2>吞吞吐吐拖</h2>
+                    </div>
+                    <div class="posts">
+sssssssssssssss
+                    </div>
+                </div>
+            </widget>
+
+        </div>
+    </div>
+    </div>
+    <include file="public@footer"/>
+</div>
+
+<include file="public@scripts"/>
+<hook name="before_body_end"/>
+</body>
+</html>

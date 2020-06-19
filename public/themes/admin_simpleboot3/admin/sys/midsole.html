@@ -1,0 +1,260 @@
+<!--面部审核-->
+<include file="public@header"/>
+<style>
+    .bigImg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        /*图片向左移动自身宽度的50%, 向上移动自身高度的50%。*/
+        transform: translate(-50%,-50%);
+    }
+    /*遮罩层*/
+    .opacityBottom {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: rgba(0,0,0,0.8);
+        z-index: 1000;
+        top: 0;
+        left: 0;
+    }
+</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:url('admin/sys/myorder')}">待完成任务</a></li>
+        <li><a href="{:url('admin/sys/finishtask')}">已完成任务</a></li>
+        <li><a href="{:url('Admin/sys/handlist')}">手工任务</a></li>
+        <li><a href="{:url('Admin/sys/purchaselist')}">采购列表</a></li>
+        <li><a href="/">返回个人中心</a></li>
+    </ul>
+    <form class="well form-inline margin-top-20" method="post" action="{:url('admin/sys/myorder')}">
+        内部订单号:
+        <input type="text" class="form-control" name="ErpOrderDetailNo" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="内部订单号">
+        Sku:
+        <input type="text" class="date" name="Sku" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="Sku">
+        <button class="btn btn-primary">搜索</button>
+    </form>
+    <form method="post" action="{:url('admin/sys/batchmidsole')}">
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <th width="100"><input type="checkbox" value="" id="selectall">全选</th>
+                <th width="100">缩略图</th>
+                <th width="100">ID</th>
+                <th width="100">SKU</th>
+                <th width="100">内部订单</th>
+                <th width="160">备注</th>
+                <th width="160">生产备注</th>
+                <th width="160">数量</th>
+                <th width="160">尺码</th>
+                <th width="160">颜色</th>
+                <th width="160">飞机板</th>
+                <th width="160">跟</th>
+                <th width="160">其它</th>
+                <th width="80">类型</th>
+                <th width="100">总入库量</th>
+                <th width="100">当前库存</th>
+                <th width="120">面</th>
+                <th width="100">楦</th>
+                <th width="160">底</th>
+                <th width="160">品牌</th>
+                <!-- <th width="160">下料价</th>
+                 <th width="160">面价</th>
+                 <th width="160">所属人</th>-->
+                <th width="160">水台</th>
+                <th width="80">木根</th>
+                <th width="80">加急</th>
+                <th width="80">类型</th>
+                <th width="80">是否采购</th>
+                <!--   <th width="80">是否开板</th>-->
+            </tr>
+            </thead>
+
+            <foreach name="data" item="vo">
+                <tr>
+                    <td> <input type="checkbox" value="{$vo.id}" name="post[{$vo.id}][id]" class="signlcheckbox"></td>
+                    <td>
+                        <foreach name="$vo.Image" item="vi">
+                            <img src="{$vi}" width="80px" class="img" style="float: left">
+                        </foreach>
+                    </td>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.CommoditySku}</td>
+                    <td>{$vo.ErpOrderDetailNo}</td>
+                    <td>{$vo.Remark}</td>
+                    <td><span style="color: red">{$vo.ProduceRemark}</span></td>
+                    <td>{$vo.Quantity}</td>
+                    <td>{$vo.Size}</td>
+                    <td>{$vo.Color}</td>
+                    <td>{$vo.AircraftBoard}</td>
+                    <td>{$vo.HeelNum}</td>
+                    <td>{$vo.Other}</td>
+                    <td>{$vo.Status}</td>
+                    <td>{$vo.TotalCount}</td>
+                    <td>{$vo.StockCount}</td>
+                    <td>{$vo.Face}</td>
+                    <td>{$vo.ShoeLast}</td>
+                    <td>{$vo.Bottom}</td>
+                    <td>{$vo.BrandName}</td>
+                    <!--<th>{$vo.BaitingPrice}</th>
+                    <td>{$vo.FacePrice}</td>
+                    <td>{$vo.BelongPerson}</td>-->
+                    <td>{$vo.WaterTableModel}</td>
+                    <td>{$vo.WoodHeelModel}</td>
+                    <td><span style="color: red">{$vo.Urgent|default="否"}  </span></td>
+                    <td>
+                        <?php echo $type[$vo['task_type']]?>
+                    </td>
+                    <td><input type="checkbox" class="purchasecd" name="post[{$vo.id}][purchase][]" <neq name="$vo.is_purchase" value="0"> checked </neq>value="采购">采购</td>
+                    <!--    <td colspan="5"><input type="checkbox" name="post[{$vo.id}][openboard]" value="1">开板</td>-->
+                    <td>
+                        <switch name="vo.is_purchase" >
+                            <case value="1" break="1"><a class="btn btn-xs btn-primary finishpurchase"  data="{$vo.id}" >完成采购</a></case>
+                            <case value="0">
+                                <a class="btn btn-xs btn-primary addpurchase"  data="{$vo.id}" >添加采购</a>
+                            </case>
+
+                        </switch>
+
+
+                    </td>
+                    <td>
+                        <a class="btn btn-xs btn-primary "  href="{:url('admin/sys/orderdetail',array('id'=>$vo['ErpOrderDetailNo'],'taskid'=>$vo['id']))}" data="{$vo.id}" >详情</a>
+                    </td>
+                    <td colspan="4"><a class=""  data="{$vo.id}" href="http://06am.cn/o/{$vo['ErpOrderDetailNo']}" target="_blank">图片无法显示点击这里打开原图片地址》</a></td>
+                </tr>
+            </foreach>
+            <tr>
+                <td><input class="btn btn-xs btn-primary" type="submit" value="批量完成"> </td>
+            </tr>
+        </table>
+        <div class="pagination">{$data->render()}</div>
+    </form>
+</div>
+
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $(function(){
+        $(".addpurchase").click(function () {
+
+            var obj = $(this).parent().parent();
+            var THIS = $(this);
+            var str = "";
+            if(obj.children().find(".purchasecd").is(':checked')){
+                str += obj.children().find(".purchasecd").val();
+            }
+            if(obj.children().find(".purchasegz").is(':checked')){
+                str +=  str ?','+ obj.children().find(".purchasegz").val() : obj.children().find(".purchasegz").val();
+            }
+            var taskid = $(this).attr("data");
+            if(str == ""){
+                alert("请选择采购类型！")
+                return false
+            }
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/addpurchase')}",
+                data: {purchase_type:str,taskid:taskid},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert("添加采购完成！")
+                        THIS.remove();
+                    }else {
+                        alert(data.msg)
+                    }
+                }
+            });
+
+
+        })
+        $(".finishpurchase").click(function () {
+
+            var obj = $(this)
+            var id = obj.attr("data");
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/finishpurchase')}",
+                data: {taskid:id},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert("采购完成！")
+                        obj.remove();
+                    }else {
+                        alert(data.msg)
+                    }
+                }
+            });
+
+
+        })
+        $(".myordersuer").click(function () {
+            var location = ""
+            var obj = $(this)
+            var id = $(this).attr("data");
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/finishorder')}",
+                data: {id:id},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert(data.msg)
+                        window.location.href="{:url('/admin/sys/myorder')}"
+                    }else {
+                        alert(data.msg)
+                        /* window.location.href="{:url('/admin/sys/myorder')}"*/
+                    }
+                }
+            });
+            /* var text = $("#location").val();
+             if(text != location){
+                 $.ajax({
+                     type: "POST",
+                     url: "{:url('Admin/sys/locationedit')}",
+                     data: {id:"{$data[0]['Id']}",info:text},
+                     dataType: "json",
+                     success: function(data){
+                     }
+                 });
+             }*/
+
+        })
+        $('.img').click(function(){
+            //获取图片路径
+            var imgsrc = $(this).attr("src");
+            console.log(imgsrc);
+            var opacityBottom = '<div class="opacityBottom" style = "display:none"><img class="bigImg" src="' + imgsrc + '"></div>';
+            $(document.body).append(opacityBottom);
+            toBigImg();//变大函数
+        });
+        $("#selectall").click(function () {
+            if($("#selectall").is(':checked')){
+                $(".signlcheckbox").prop('checked',true);
+            }else {
+                $(".signlcheckbox").prop('checked',false);
+            }
+        })
+
+    });
+    function toBigImg(){
+        $(".opacityBottom").addClass("opacityBottom");//添加遮罩层
+        $(".opacityBottom").show();
+        $("html,body").addClass("none-scroll");//下层不可滑动
+        $(".bigImg").addClass("bigImg");//添加图片样式
+        $(".opacityBottom").click(function(){
+            $("html,body").removeClass("none-scroll");
+            $(".opacityBottom").remove();
+        });
+    }
+</script>
+</body>
+</html>

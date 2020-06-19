@@ -1,0 +1,91 @@
+<form class="well form-inline margin-top-20" method="post" action="">
+    内部订单号:
+    <input type="text" class="form-control" name="ErpOrderDetailNo" style="width: 200px;"
+           value="{$keyword|default=''}" placeholder="内部订单号">
+    <!--Sku:
+    <input type="text" class="date" name="Sku" style="width: 200px;"
+           value="{$keyword|default=''}" placeholder="Sku">-->
+    <button class="btn btn-primary">搜索</button>
+</form>
+<form class="js-ajax-form" method="post">
+    <table class="table table-hover table-bordered table-list">
+        <thead>
+        <tr>
+            <th width="100">任务ID</th>
+            <th width="80">流程号</th>
+            <th width="80">内部订单</th>
+            <th width="80">人员账户</th>
+            <th width="80">人员信息</th>
+            <th width="160">添加时间</th>
+            <th width="160">确认时间</th>
+            <th width="80">类型</th>
+            <th width="80">用户状态</th>
+            <th width="80">状态</th>
+            <th width="80">采购</th>
+            <th width="80">采购类型</th>
+            <th width="80">异常信息</th>
+            <th width="40">任务时长</th>
+        </tr>
+        </thead>
+
+        <foreach name="data" item="vo">
+            <tr>
+                <td>{$vo.id}</td>
+                <td>
+                    {$vo.process_id}
+                </td>
+                <td>{$vo.ErpOrderDetailNo}</td>
+                <td>{$vo.user_login}</td>
+                <td>{$vo.user_nickname}</td>
+                <td>{$vo.addtime}</td>
+                <td>{$vo.confirm_time|default='未确认'}</td>
+                <td>
+                    <?php echo $type[$vo['task_type']]?>
+                </td>
+                <td>
+                    <switch name="vo.user_status" >
+                        <case value="1" break="1">正常</case>
+                        <case value="3" break="1">请假</case>
+                        <case value="0" break="1">禁用</case>
+                        <case value="2">未验证</case>
+                    </switch>
+                </td>
+                <td>
+                    <switch name="vo.status" >
+                        <case value="1" break="1">完成</case>
+                        <case value="3" break="1">确认</case>
+                        <case value="0" break="1">未处理</case>
+                        <case value="2">订单撤销</case>
+                    </switch>
+                </td>
+                <td>
+                    <switch name="vo.is_purchase" >
+                        <case value="1" break="1">需采购</case>
+                        <case value="3" break="1">采购失败</case>
+                        <case value="0" break="1">无采购</case>
+                        <case value="2">完成采购</case>
+                    </switch>
+                </td>
+                <td>
+                    {$vo.purchase_type|default=''}
+                </td>
+                <td>
+                    {$vo.otherinfo|default=''}
+                </td>
+                <td>
+                    <!--{$vo.addtime|BetweenTwoDays}小时-->
+                    <?php
+                            if(($tem = BetweenTwoDays($vo['addtime'])) > 36){
+                    echo '<span style="color: red">'. $tem.'小时</span>';
+                    }else{
+                    echo $tem."小时";
+                    }
+                    ?>
+
+                </td>
+            </tr>
+        </foreach>
+
+    </table>
+    <div class="pagination">{$data->render()}</div>
+</form>

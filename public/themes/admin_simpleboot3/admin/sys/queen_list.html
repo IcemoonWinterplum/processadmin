@@ -1,0 +1,81 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:url('Admin/sys/queenList')}">待完成任务</a></li>
+    </ul>
+    <form class="js-ajax-form" action="" method="post">
+
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+
+                <th>id</th>
+                <th>Sku</th>
+                <th>内部订单号</th>
+                <th>时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <volist name='data' id='queen'>
+                <tr>
+                    <th>{$queen.process_id}</th>
+                    <th>{$queen.Sku}</th>
+                    <th>{$queen.ErpOrderDetailNo}</th>
+                    <th>{$queen.addtime}</th>
+                    <th><input type="hidden" class="taskid"  value="{$user.taskid}"><a class="btn btn-xs btn-primary " href="{:url('admin/sys/queenStockData',array('process_id'=>$queen['process_id'],'ErpOrderDetailNo'=>$queen['ErpOrderDetailNo']))}"  >进入</a></th>
+                </tr>
+            </volist>
+        </table>
+
+        <ul class="pagination">{$data->render()}</ul>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $(".sure").click(function () {
+        var obj = $(this)
+        var id = $(this).attr("data");
+        var taskid = obj.parent().find(".taskid").val()
+        $.ajax({
+            type: "POST",
+            url: "{:url('Admin/sys/dorepresentations')}",
+            data: {id:id,status:1,taskid:taskid},
+            dataType: "json",
+            success: function(data){
+                if (data.code == 200)
+                {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }else {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }
+            }
+        });
+    })
+    $(".Reject").click(function () {
+        var obj = $(this)
+        var id = $(this).attr("data");
+        var taskid = obj.parent().find(".taskid").val()
+        $.ajax({
+            type: "POST",
+            url: "{:url('Admin/sys/dorepresentations')}",
+            data: {id:id,status:0,taskid:taskid},
+            dataType: "json",
+            success: function(data){
+                if (data.code == 200)
+                {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }else {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>

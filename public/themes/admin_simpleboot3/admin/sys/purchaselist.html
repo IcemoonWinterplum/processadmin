@@ -1,0 +1,121 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('admin/sys/myorder')}">待完成任务</a></li>
+        <li><a href="{:url('admin/sys/finishtask')}">已完成任务</a></li>
+        <li><a href="{:url('Admin/sys/deletetask')}">已取消任务</a></li>
+        <li><a href="{:url('Admin/sys/handlist')}">手工任务</a></li>
+        <li class="active"><a href="{:url('Admin/sys/purchaselist')}">采购列表</a></li>
+        <li><a href="/">返回个人中心</a></li>
+    </ul>
+    <form class="well form-inline margin-top-20" method="post" action="{:url('admin/sys/purchaselist')}">
+        内部订单号:
+        <input type="text" class="form-control" name="ErpOrderDetailNo" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="内部订单号">
+        开始时间：<input class="form-control js-bootstrap-datetime valid" type="text" name="start_time" value="{$Request.param.start_time}" aria-invalid="false">
+        结束时间：<input class="form-control js-bootstrap-datetime valid" type="text" name="end_time" value="{$Request.param.end_time}" aria-invalid="false">
+        <button class="btn btn-primary">搜索</button>
+    </form>
+    <form class="js-ajax-form" method="post" action="{:url('admin/sys/handlist')}">
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="{:lang('DELETE_CONFIRM_MESSAGE')}">{:lang('DELETE')}
+            </button>
+        </div>-->
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <!-- <th width="16">
+                     <label>
+                         <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                     </label>
+                 </th>-->
+                <th width="100">ID</th>
+                <th width="80">任务ID</th>
+                <th width="80">流程ID</th>
+                <th width="80">Sku</th>
+                <th width="80">内部订单</th>
+                <th width="80">任务类型</th>
+                <th width="80">手工类型</th>
+                <th width="80">开始时间</th>
+                <th width="80">完成时间</th>
+                <th width="80">状态</th>
+                <th width="120">操作</th>
+            </tr>
+            </thead>
+
+            <foreach name="data" item="vo">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.process_id}</td>
+                    <td>{$vo.Sku}</td>
+                    <td>{$vo.ErpOrderDetailNo}</td>
+                    <td> <?php echo $type[$vo['task_type']]?></td>
+                    <td> {$vo.purchase_type}</td>
+                    <td>{$vo.purchase_add_time}</td>
+                    <td>{$vo.purchase_finish_time}</td>
+                    <!--  <td>
+                          <switch name="vo.status" >
+                              <case value="1" break="1">完成</case>
+                              <case value="0">未处理</case>
+                              <default />不需要
+                          </switch>
+                      </td>-->
+
+                    <td>
+                        <select name="status" >
+                            <option value="1" <?php if($vo["is_purchase"] == 1) echo "selected"; ?>>处理中</option>
+                            <option value="2" <?php if($vo["is_purchase"] == 2) echo "selected"; ?>>完成</option>
+                            <option value="3" <?php if($vo["is_purchase"] == 3) echo "selected"; ?>>采购失败</option>
+                            <option value="0" >删除</option>
+                        </select>
+                        <input type="hidden" value="{$vo.id}" name="id">
+                    </td>
+                    <td width="50"><a class="btn btn-xs btn-primary finishpurchase" data="{$vo.id}" >确定修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{:url('admin/sys/orderdetail',array('id'=>$vo['ErpOrderDetailNo'],'taskid'=>$vo['id']))}" class="btn btn-xs btn-primary" " >返回任务</a></td>
+
+                </tr>
+            </foreach>
+            <tr><td colspan="10"><div class="pagination">{$data->render()}</div></td><td>总共：{$data->total()} 条</td></tr>
+        </table>
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="你确定删除吗？">{:lang('DELETE')}
+            </button>
+        </div>-->
+       <!-- <div class="pagination">{$data->render()}</div>-->
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $(function(){
+        $(".finishpurchase").click(function () {
+
+            var obj = $(this)
+            var id = obj.attr("data");
+            var purchase_status = obj.parent().parent().find("select").val();
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/finishpurchase')}",
+                data: {taskid:id,purchase_status:purchase_status},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert(data.msg)
+                        window.location.reload()
+                    }else {
+                        alert(data.msg)
+                    }
+                }
+            });
+
+
+        })
+
+    });
+</script>
+</body>
+</html>

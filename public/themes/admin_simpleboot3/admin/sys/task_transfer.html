@@ -1,0 +1,122 @@
+<include file="public@header"/>
+</head>
+<body>
+<td class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="/">个人中心</a></li>
+
+    </ul>
+    <!--<form class="well form-inline margin-top-20" method="post" action="{:url('AdminPage/index')}">
+        标题:
+        <input type="text" class="form-control" name="keyword" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="请输入关键字">
+        <button class="btn btn-primary">搜索</button>
+    </form>-->
+    <form class="js-ajax-form" method="post" action="{:url('admin/sys/taskTransfer',['taskid'=>$Request.param.taskid])}">
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="{:lang('DELETE_CONFIRM_MESSAGE')}">{:lang('DELETE')}
+            </button>
+        </div>-->
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <!-- <th width="16">
+                     <label>
+                         <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                     </label>
+                 </th>-->
+                <th width="20">任务ID</th>
+                <th width="20">流程号</th>
+                <th width="20" >用户ID</th>
+                <th width="20">内部订单</th>
+                <th width="50" >账户</th>
+                <th width="50" >名称</th>
+                <th width="50">任务类型</th>
+                <th width="50">完成时间</th>
+                <th width="50">状态</th>
+                <th width="50">转移给</th>
+                <th width="50"></th>
+            </tr>
+            </thead>
+
+                <tr>
+                    <td>{$data.id|default="无"}</td>
+                    <td>{$data.process_id|default="无"}</td>
+                    <td>{$data.userid|default="无"}</td>
+                    <td>{$data.ErpOrderDetailNo|default="无"}</td>
+                    <td>{$data.user_login|default="无"}</td>
+                    <td>{$data.user_nickname|default="无"}</td>
+                    <th width="50">{$data.task_type|default="无"}</th>
+                    <th width="50">{$data.finish_time|default="无"}</th>
+                    <th width="50">
+                        <switch name="data.status" >
+                            <case value="1" break="1">完成</case>
+                            <case value="0">未处理</case>
+                            <default />不需要
+                        </switch>
+                    </th>
+                    <th width="50">
+                        <select name="user" id="user">
+                            <foreach name="user" item="vi">
+                                <option value="{$vi.user_id}" <?php if($data["userid"] == $vi["user_id"]) echo "selected"; ?>>{$vi.user_nickname}</option>
+                            </foreach>
+                        </select>
+                    </th>
+                    <th width="50"><input type="submit" class="btn btn-xs btn-primary myordersuer"  data="{$data.id}" id="sure" value="确定修改"></input></th>
+                </tr>
+
+
+        </table>
+        <hr>
+        <h5>手工信息</h5>
+        <hr>
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <!-- <th width="16">
+                     <label>
+                         <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                     </label>
+                 </th>-->
+                <th width="20">任务分配者</th>
+                <th width="20">接手者</th>
+                <th width="50" >任务id</th>
+                <th width="20">单价</th>
+                <th width="50">时间</th>
+                <th width="50">状态</th>
+            </tr>
+            </thead>
+            <foreach name="hand" item="data">
+                <tr>
+                    <td>{$data.user_login|default="无"} - {$data.user_nickname}</td>
+                    <td>{$data.accept_user_login|default="无"} - {$data.accept_user_nickname}</td>
+                    <td>{$data.taskid|default="无"}</td>
+                    <td>{$data.price|default="无"}</td>
+                    <td>{$data.addtime|default="无"}</td>
+                    <th width="50">
+                        <switch name="data.status" >
+                            <case value="1" break="1">完成</case>
+                            <case value="0">未处理</case>
+                            <default />不需要
+                        </switch>
+                    </th>
+                </tr>
+            </foreach>
+
+        </table>
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="你确定删除吗？">{:lang('DELETE')}
+            </button>
+        </div>-->
+        <!--<div class="pagination"></div>-->
+    </form>
+    </div>
+    <script src="__STATIC__/js/admin.js"></script>
+    <script>
+
+
+    </script>
+</body>
+</html>

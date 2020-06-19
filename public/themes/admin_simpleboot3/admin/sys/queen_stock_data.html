@@ -1,0 +1,192 @@
+<include file="public@header"/>
+<style>
+    .bigImg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        /*图片向左移动自身宽度的50%, 向上移动自身高度的50%。*/
+        transform: translate(-50%,-50%);
+    }
+    /*遮罩层*/
+    .opacityBottom {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: rgba(0,0,0,0.8);
+        z-index: 1000;
+        top: 0;
+        left: 0;
+    }
+</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a>订单{$Request.param.ErpOrderDetailNo}</a></li>
+        <li><a href="{:url('admin/sys/queenList')}">库存匹配列表</a></li>
+    </ul>
+    <!-- <form class="well form-inline margin-top-20" method="post" action="{:url('AdminPage/index')}">
+         标题:
+         <input type="text" class="form-control" name="keyword" style="width: 200px;"
+                value="{$keyword|default=''}" placeholder="请输入关键字">
+         <button class="btn btn-primary">搜索</button>
+     </form>-->
+    <!--<form class="js-ajax-form" method="post">-->
+    <!--<div class="table-actions">
+        <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                data-subcheck="true" data-msg="{:lang('DELETE_CONFIRM_MESSAGE')}">{:lang('DELETE')}
+        </button>
+    </div>-->
+    <table class="table table-hover table-bordered table-list">
+        <thead>
+        <tr>
+            <th width="100">编号</th>
+            <th width="100">SKU</th>
+            <th width="100">内部订单</th>
+            <th width="160">备注</th>
+            <th width="160">生产备注</th>
+            <th width="160">数量</th>
+            <th width="160">尺码</th>
+            <th width="160">颜色</th>
+            <th width="160">飞机板</th>
+            <th width="160">跟</th>
+            <th width="160">Other</th>
+            <th width="120">面</th>
+            <th width="100">楦</th>
+            <th width="160">底</th>
+            <th width="160">品牌</th>
+            <th width="160">所属人</th>
+            <th width="160">水台</th>
+            <th width="80">木根</th>
+            <th width="80">操作</th>
+        </tr>
+        </thead>
+        <foreach name="newprocess" item="vo">
+            <tr>
+                <td>{$vo.process_id}</td>
+                <td>
+                    <input type="hidden" id="newprocess" value="{$vo.ErpOrderDetailNo}">
+                    {$vo.CommoditySku}
+                </td>
+                <td>{$vo.ErpOrderDetailNo}</td>
+                <td>{$vo.Remark}</td>
+                <td>{$vo.ProduceRemark}</td>
+                <td>{$vo.Quantity}</td>
+                <td>{$vo.Size}</td>
+                <td>{$vo.Color}</td>
+                <td>{$vo.AircraftBoard}</td>
+                <td>{$vo.HeelNum}</td>
+                <td>{$vo.Other}</td>
+                <td>{$vo.Face}</td>
+                <td>{$vo.ShoeLast}</td>
+                <td>{$vo.Bottom}</td>
+                <td>{$vo.BrandName}</td>
+                <td>{$vo.BelongPerson}</td>
+                <td>{$vo.WaterTableModel}</td>
+                <td>{$vo.WoodHeelModel}</td>
+                <td><a class="btn btn-xs btn-primary startprocess"  data="{$vo.ErpOrderDetailNo}">不需库存</a></td>
+            </tr>
+        </foreach>
+        <tr>
+            <td colspan="18">可用的库存</td>
+        </tr>
+        <foreach name="stockprocess" item="vo">
+            <tr>
+                <td>{$vo.process_id}</td>
+                <td>
+                    {$vo.CommoditySku}
+                </td>
+                <td>{$vo.ErpOrderDetailNo}</td>
+                <td>{$vo.Remark}</td>
+                <td>{$vo.ProduceRemark}</td>
+                <td>{$vo.Quantity}</td>
+                <td>{$vo.Size}</td>
+                <td>{$vo.Color}</td>
+                <td>{$vo.AircraftBoard}</td>
+                <td>{$vo.HeelNum}</td>
+                <td>{$vo.Other}</td>
+                <td>{$vo.Face}</td>
+                <td>{$vo.ShoeLast}</td>
+                <td>{$vo.Bottom}</td>
+                <td>{$vo.BrandName}</td>
+                <td>{$vo.BelongPerson}</td>
+                <td>{$vo.WaterTableModel}</td>
+                <td>{$vo.WoodHeelModel}</td>
+                <td>
+                    <a class="btn btn-xs btn-primary openstock"  data="{$vo.ErpOrderDetailNo}">启用库存</a>
+                </td>
+            </tr>
+        </foreach>
+
+
+    </table>
+    <!-- </form>-->
+</div>
+
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $(function(){
+        $(".openstock").click(function () {
+            var obj = $(this)
+            var stock = obj.attr("data");
+            var newprocess =$("#newprocess").val();
+            if(confirm("你确定启用"+stock+"库存吗？")){
+                $.ajax({
+                    type: "POST",
+                    url: "{:url('Admin/sys/openStock')}",
+                    data: {stock:stock,newprocess:newprocess},
+                    dataType: "json",
+                    success: function(data){
+                        if (data.code == 200)
+                        {
+                            alert(data.msg)
+                            window.location.href="{:url('Admin/sys/queenList')}"
+                        }else {
+                            alert(data.msg)
+                        }
+
+                    }
+                });
+            }
+
+
+        })
+        $(".startprocess").click(function () {
+            var obj = $(this)
+            var ErpOrderDetailNo = obj.attr("data");
+            if(confirm("你确定不用库存吗？")){
+                $.ajax({
+                    type: "POST",
+                    url: "{:url('Admin/sys/newprocess')}",
+                    data: {ErpOrderDetailNo:ErpOrderDetailNo},
+                    dataType: "json",
+                    success: function(data){
+                        if (data.code == 200)
+                        {
+                            alert(data.msg)
+                            window.location.href="{:url('Admin/sys/queenList')}"
+                        }else {
+                            alert(data.msg)
+                        }
+
+                    }
+                });
+            }
+
+
+        })
+
+    });
+    function toBigImg(){
+        $(".opacityBottom").addClass("opacityBottom");//添加遮罩层
+        $(".opacityBottom").show();
+        $("html,body").addClass("none-scroll");//下层不可滑动
+        $(".bigImg").addClass("bigImg");//添加图片样式
+        $(".opacityBottom").click(function(){
+            $("html,body").removeClass("none-scroll");
+            $(".opacityBottom").remove();
+        });
+    }
+</script>
+</body>
+</html>

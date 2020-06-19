@@ -1,0 +1,97 @@
+<include file="public@header"/>
+</head>
+<body>
+<td class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <!--<li class="active"><a href="/">返回个人中心</a></li>-->
+    </ul>
+    <!--<form class="well form-inline margin-top-20" method="post" action="{:url('AdminPage/index')}">
+        标题:
+        <input type="text" class="form-control" name="keyword" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="请输入关键字">
+        <button class="btn btn-primary">搜索</button>
+    </form>-->
+    <form class="js-ajax-form" method="post">
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="{:lang('DELETE_CONFIRM_MESSAGE')}">{:lang('DELETE')}
+            </button>
+        </div>-->
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <!-- <th width="16">
+                     <label>
+                         <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                     </label>
+                 </th>-->
+                <th width="20">任务ID</th>
+                <th width="20">流程号</th>
+                <th width="50" >用户ID</th>
+                <th width="20">内部订单</th>
+                <th width="50" >账户</th>
+                <th width="50" >名称</th>
+                <th width="50">任务类型</th>
+                <th width="50">完成时间</th>
+                <th width="50">状态</th>
+                <th width="50">异常备注</th>
+                <th width="50">是否采购</th>
+                <th width="50">采购类型</th>
+                <th width="50">采购时间</th>
+                <th width="50">采购完成时间</th>
+                <th width="50">操作</th>
+            </tr>
+            </thead>
+            <foreach name="page" item="data">
+                <tr>
+                    <td>{$data.id|default="无"}</td>
+                    <td>{$data.process_id|default="无"}</td>
+                    <td>{$data.userid|default="无"}</td>
+                    <td>{$data.ErpOrderDetailNo|default="无"}</td>
+                    <td>{$data.user_login|default="无"}</td>
+                    <td>{$data.user_nickname|default="无"}</td>
+                    <th width="50">{$data.task_type|default="无"}</th>
+                    <th width="50">{$data.finish_time|default="无"}</th>
+                    <th width="50">
+                        <switch name="data.status" >
+                            <case value="1" break="1">完成</case>
+                            <case value="0">未处理</case>
+                            <case value="3">已确认</case>
+                            <default />不需要
+                        </switch>
+                    </th>
+                    <th width="50">{$data.otherinfo|default="无"}</th>
+                    <th width="50">
+                        <switch name="data.is_purchase" >
+                            <case value="2" break="1">完成</case>
+                            <case value="0">否</case>
+                            <case value="1">是</case>
+                        </switch>
+                    </th>
+                    <th width="50">{$data.purchase_type|default=""}</th>
+                    <th width="50">{$data.purchase_add_time|default=""}</th>
+                    <th width="50">{$data.purchase_finish_time|default=""}</th>
+                    <th><a href="{:url('admin/sys/taskTransfer',array('taskid'=>$data['id']))}">转移任务</a> </th>
+                </tr>
+            </foreach>
+
+        </table>
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="你确定删除吗？">{:lang('DELETE')}
+            </button>
+        </div>-->
+        <div class="pagination">{$page->render()}</div>
+    </form>
+    </div>
+    <script src="__STATIC__/js/admin.js"></script>
+    <script>
+        window.onload = function () {
+            setInterval(function () {
+                window.location.reload()
+            }, 60000)
+        }
+
+    </script>
+</body>
+</html>

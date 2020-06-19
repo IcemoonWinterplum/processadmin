@@ -1,0 +1,88 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+
+    <form class="js-ajax-form" action="" method="post">
+
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <th width="50">ID</th>
+                <th>任务id</th>
+                <th>流程id</th>
+                <th>时间</th>
+                <th>任务类型</th>
+                <th>申述人</th>
+                <th>订单</th>
+                <th>原因</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <volist name='data' id='vo'>
+                <tr>
+                    <th width="50">{$vo.id}</th>
+                    <th>{$vo.taskid}</th>
+                    <th><a href="{:url('Admin/sys/processAlltask',['processid'=>$vo['process_id']])}">{$vo.process_id}</a></th>
+                    <th>{$vo.addtime}</th>
+                    <td>
+                        <?php echo $process[$vo['task_type']]?>
+                    </td>
+                    <th>{$vo.user_nickname}-{$vo.user_login}</th>
+                    <th>{$vo.ErpOrderDetailNo}</th>
+                    <th>{$vo.remark}</th>
+                    <th><input type="hidden" class="taskid"  value="{$vo.taskid}"><a class="btn btn-xs btn-primary sure"  data="{$vo.id}" >同意</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-xs btn-primary Reject"  data="{$vo.id}" >驳回</a></th>
+                </tr>
+            </volist>
+        </table>
+
+        <ul class="pagination">{$data->render()}</ul>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $(".sure").click(function () {
+        var obj = $(this)
+        var id = $(this).attr("data");
+        var taskid = obj.parent().find(".taskid").val()
+        $.ajax({
+            type: "POST",
+            url: "{:url('Admin/Sysmanage/doprocessTaskBack')}",
+            data: {id:id,status:1,taskid:taskid},
+            dataType: "json",
+            success: function(data){
+                if (data.code == 200)
+                {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }else {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }
+            }
+        });
+    })
+    $(".Reject").click(function () {
+        var obj = $(this)
+        var id = $(this).attr("data");
+        var taskid = obj.parent().find(".taskid").val()
+        $.ajax({
+            type: "POST",
+            url: "{:url('Admin/Sysmanage/doprocessTaskBack')}",
+            data: {id:id,status:2,taskid:taskid},
+            dataType: "json",
+            success: function(data){
+                if (data.code == 200)
+                {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }else {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>

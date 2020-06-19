@@ -1,0 +1,16 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:url('Admin/sys/myorder')}">待完成任务</a></li>
+        <li><a href="{:url('Admin/sys/finishtask')}">已完成任务</a></li>
+        <li><a href="{:url('Admin/sys/deletetask')}">已取消任务</a></li>
+        <li><a href="{:url('Admin/sys/handlist')}">手工任务</a></li>
+        <li><a href="{:url('Admin/public/logout')}">注销</a></li>
+    </ul>
+    <div style="width: 100%;min-height: 600px;line-height: 600px;text-align: center"><h1>{$msg}</h1></div>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

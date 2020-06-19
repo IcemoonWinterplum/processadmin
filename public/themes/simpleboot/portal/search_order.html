@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1">
+    <title>{$site_info.site_name|default=''}</title>
+    <meta name="keywords" content="{$site_info.site_seo_keywords|default=''}"/>
+    <meta name="description" content="{$site_info.site_seo_description|default=''}">
+    <include file="public@head"/>
+    <script type="text/javascript" src="__TMPL__/public/assets/js/jquery-3.3.1.min.js"></script>
+    <!--<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>-->
+    <script type="text/javascript" src="__TMPL__/public/assets/js/main.js"></script>
+    <script type="text/javascript" src="__TMPL__/public/assets/js/wow.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="__TMPL__/public/assets/css/font_u4qz1594lnixusor.css">
+    <link rel="stylesheet" href="__TMPL__/public/assets/css/style.css">
+    <link rel="stylesheet" href="__TMPL__/public/assets/css/normalize.css">
+    <link rel="stylesheet" href="__TMPL__/public/assets/css/detail_p.css">
+    <link rel="stylesheet" href="__TMPL__/public/assets/css/animate.min.css">
+    <hook name="before_head_end"/>
+</head>
+<body class="body-white">
+
+<!--头部导航-->
+<include file="public@wrap" />
+<!--头部视频播放区域-->
+<!--<div class="wrap header-wrap">
+    <div class="header-container">
+        <div class="videos">
+            &lt;!&ndash;bottom&ndash;&gt;
+            <div class="video_b" style="margin-top:0">
+                <div class="video_b_in">
+                    <div class="video_ls">
+                        <video id="vids">
+                            您的浏览器不支持h5标签,请升级或换个浏览器
+                        </video>
+                        &lt;!&ndash;暂停&ndash;&gt;
+                        <div id="pass">
+                            <img src="{$Think.server.host_name}__TMPL__/public/assets/images/zt.png">
+                        </div>
+                        &lt;!&ndash;控制器&ndash;&gt;
+                        <div class="controls">
+                            &lt;!&ndash;进度条容器&ndash;&gt;
+                            <div id="pBar">
+                                &lt;!&ndash;进度条底色&ndash;&gt;
+                                <div class="pBar_bj">
+                                    &lt;!&ndash;缓冲的进度条&ndash;&gt;
+                                    <div id="buff"></div>
+                                    &lt;!&ndash;进度条动态&ndash;&gt;
+                                    <div id="pBar_move">
+                                        &lt;!&ndash;进度条按钮&ndash;&gt;
+                                        <div id="pBtn"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            &lt;!&ndash;展厅播放快进快退音量全屏&ndash;&gt;
+                            <div class="trol_list">
+                                &lt;!&ndash;暂停和快进快退&ndash;&gt;
+                                <div class="list_1">
+                                    <i class="iconfont icon-zanting2" id="ztbf"></i>
+                                </div>
+                                &lt;!&ndash;音量&ndash;&gt;
+                                <div class="voice">
+                                    <i class="iconfont icon-yinliang" style="float:left;"></i>
+                                    <div class="voicep">
+                                        <div id="vBar">
+                                            <div id="vBar_in"></div>
+                                        </div>
+                                        <div id="vBtn"></div>
+                                    </div>
+                                </div>
+                                &lt;!&ndash;时间&ndash;&gt;
+                                <div class="vtime">
+                                    <font id="nTime">00:00:00</font>/<em id="aTime">00:00:00</em>
+                                </div>
+                                &lt;!&ndash;全屏&ndash;&gt;
+                                <i id="qp" class="iconfont icon-quanping"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="" style="line-height: 470px;align-content: center;float: right">
+            <input type="text" value="" placeholder="please input your order number" style="border-radius: 5px;width:220px;height: 30px;">
+            <input type="button" value="search" style="border-radius: 5px;height: 30px;">
+        </div>
+    </div>
+</div>-->
+<div class="search-bottom-wrap">
+    <div class="search-box">
+        <div class="search-title">
+            SEARCHE MY  ORDER
+        </div>
+        <div class="search-input">
+            <input type="text" placeholder="search" id="ordernum">
+            <img src="{$Think.server.host_name}__TMPL__/public/assets/images/search.png" alt="" id="dosearch">
+        </div>
+    </div>
+</div>
+<div style="background: #ebf7fb;height: 30px"></div>
+<!--医疗警报系统-->
+<div class="wrap system-wrap">
+    <div class="system-container" style="min-height:500px">
+        <!-- <div class="system-title">
+            <h2>我们的医疗警报系统</h2>
+            <div class="system-title-line">
+                <div class="system-title-line-sub"></div>
+            </div>
+            <div class="system-title-bottom">Our medical alert system</div>
+        </div -->
+        <table class="table table-hover table-bordered table-list" id="content_process">
+            <thead>
+            <tr>
+                <th width="20">ID</th>
+                <th width="20">内部订单</th>
+                <th width="20">Sku</th>
+                <th width="60" >鞋面审单</th>
+                <th width="50" >开板</th>
+                <th width="50" >描版</th>
+                <th width="70">配料下料</th>
+                <!--<th width="50">下料</th>-->
+                <th width="50">配辅料</th>
+                <th width="50">做面</th>
+                <th width="50">鞋底审单</th>
+                <th width="50">3D</th>
+                <th width="50">开楦</th>
+                <th width="50">大底</th>
+                <th width="50">中底</th>
+                <!--   <th width="180" colspan="4" style="text-align: center;line-height: 40px">
+                      &lt;!&ndash; <div style="line-height: 20;text-align: center;width: 100%;float: left">鞋底审单</div>&ndash;&gt;
+                       <div style="text-align: center;width: 100%;float: left">
+                           <div style="text-align: center;width: 25%;float: left">3D</div>
+                           <div style="text-align: center;width: 25%;float: left">开楦</div>
+                           <div style="text-align: center;width: 25%;float: left">大底</div>
+                           <div style="text-align: center;width: 25%;float: left">中底</div>
+                       </div>
+                   </th>-->
+                <th width="50">总配料</th>
+                <th width="50">做底</th>
+                <th width="50">打跟</th>
+                <th width="50">贴垫</th>
+                <th width="50">品检</th>
+                <th width="50">包装</th>
+                <th width="50">交付</th>
+                <th width="50">状态</th>
+                <th width="40">加急</th>
+                <th width="40">操作</th>
+            </tr>
+            </thead>
+
+            <foreach name="pages" item="vo">
+                <tr>
+
+                    <td>{$vo.id}</td>
+                    <td>{$vo.ErpOrderDetailNo}</td>
+                    <td>{$vo.Sku}</td>
+                    <switch name="vo.examinePaper" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'examinePaper'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.openboard" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'openboard'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <case value="2"><td style="background: red;padding: 0px;">不需要</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.tracing" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'tracing'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <case value="2"><td style="background: red;padding: 0px;">不需要</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.distributionBlanking" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'distributionBlanking'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <!--<switch name="vo.mixedIngredients" >
+                          <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'mixedIngredients'])}">完成</a></td></case>
+                          <case value="0"><td>未处理</td></case>
+                          <default /><td>未处理</td>
+                      </switch>-->
+                    <switch name="vo.accessories" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'mixedIngredients'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.makeFace" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'makeFace'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <!--鞋底审单-->
+                    <!--<switch name="vo.examinePaperbottom" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;">完成</td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>-->
+                    <switch name="vo.examinePaperbottom" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'examinePaperbottom'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <case value="2"><td style="background: red;padding: 0px;">不需要</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.threeD" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'threeD'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <case value="2"><td style="background: red;padding: 0px;">不需要</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.last" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'last'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <case value="2"><td style="background: red;padding: 0px;">不需要</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.outsole" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'outsole'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.midsole" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'midsole'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <!-------------------------------------------->
+                    <switch name="vo.totalmixedIngredients" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'totalmixedIngredients'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.makeBottom" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'makeBottom'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.drill" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'drill'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.stickingPad" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'stickingPad'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.inspection" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'inspection'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.packing" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'packing'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <switch name="vo.deliver" >
+                        <case value="1" break="1"><td style="background: red;padding: 0px;"><a href="{:url('Admin/sys/taskshow',['processid'=>$vo['id'],'type'=>'deliver'])}">完成</a></td></case>
+                        <case value="0"><td>未处理</td></case>
+                        <default /><td>未处理</td>
+                    </switch>
+                    <td>
+                        <select name="status" class="status">
+                            <option value="1"  <eq name="vo.start_status" value="1" >selected</eq> >开始</option>
+                            <option value="4"  <eq name="vo.start_status" value="4" >selected</eq> >暂停</option>
+                            <option value="2"  <eq name="vo.start_status" value="2" >selected</eq> >完成</option>
+                            <option value="3"  <eq name="vo.start_status" value="3" >selected</eq> >取消</option>
+                            <option value="5"  <eq name="vo.start_status" value="5" >selected</eq> >取消并存入库存</option>
+                        </select>
+                    </td>
+                    <td>{$vo.Urgent|default="否"}</td>
+                    <td>
+                        <!--  <a class="btn btn-xs btn-danger js-ajax-delete" href="{:url('AdminPage/delete',array('id'=>$vo['id']))}">{:lang('DELETE')}</a>-->
+                    </td>
+                </tr>
+            </foreach>
+
+        </table>
+        <!--<div class="system-sub-left system-sub-1 wow bounceIn" data-wow-delay="0.5s">
+            <div class="system-sub-content">
+                <div class="system-sub-title">
+                    圣莲岛->观盛世莲花
+                </div>
+                <div class="system-sub-text">
+                    <p>接天莲叶无穷碧<br>映日荷花别样红<br>&#45;&#45;白居易</p>
+                    <p></p>
+                </div>
+            </div>
+            <div class="system-sub-img">
+                <img src="{$Think.server.host_name}__TMPL__/public/assets/images/system_1.png" alt="">
+            </div>
+        </div>
+        <div class="system-sub-right system-sub-2 wow bounceIn" data-wow-delay="0.7s">
+            <div class="system-sub-img">
+                <img src="{$Think.server.host_name}__TMPL__/public/assets/images/system_2.png" alt="">
+            </div>
+            <div class="system-sub-content">
+                <div class="system-sub-title">
+                    龙凤古镇
+                </div>
+                <div class="system-sub-text">
+                    <p>感沧桑历史</p>
+                    <p>看龙凤古镇</p>
+                </div>
+            </div>
+        </div>
+        <div class="system-sub-left system-sub-3 wow bounceIn" data-wow-delay="0.9s">
+            <div class="system-sub-content">
+                <div class="system-sub-title">
+                    子昂故里
+                </div>
+                <div class="system-sub-text">
+                    <p>前不见古人，后不见来者</br>
+                        念天地之悠悠，独怆然而涕下<br>&#45;&#45;陈子昂</p>
+                </div>
+            </div>
+            <div class="system-sub-img">
+                <img src="{$Think.server.host_name}__TMPL__/public/assets/images/system_3.png" alt="">
+            </div>
+        </div>
+        <div class="system-sub-right system-sub-4 wow bounceIn" data-wow-delay="1.1s">
+            <div class="system-sub-img">
+                <img src="{$Think.server.host_name}__TMPL__/public/assets/images/system_4.png" alt="">
+            </div>
+            <div class="system-sub-content">
+                <div class="system-sub-title">
+                    中国死海
+                </div>
+                <div class="system-sub-text">
+                    <p>它与中东死海起源1亿5千万年前</p>
+                    <p>被称为“中国死海”</p>
+                </div>
+            </div>
+        </div>
+        <div class="system-sub-left system-sub-5 wow bounceIn" data-wow-delay="1.3s">
+            <div class="system-sub-content">
+                <div class="system-sub-title">
+                    观音故里->灵泉寺
+                </div>
+                <div class="system-sub-text">
+                    <p>观音菩萨三姊妹，</br>遂宁三大文化品牌之一</br>———观音文化。</p>
+                </div>
+            </div>
+            <div class="system-sub-img">
+                <img src="{$Think.server.host_name}__TMPL__/public/assets/images/system_5.png" alt="">
+            </div>
+        </div>
+        <div class="system-sub-right system-sub-6 wow bounceIn" data-wow-delay="1.5s">
+            <div class="system-sub-img">
+                <img src="{$Think.server.host_name}__TMPL__/public/assets/images/system_6.png" alt="">
+            </div>
+            <div class="system-sub-content">
+                <div class="system-sub-title">
+                    卓筒井
+                </div>
+                <div class="system-sub-text">
+                    <p>凿地植竹,为之卓筒井</p>
+                    <p>中国古代第五大发明。</p>
+                </div>
+            </div>
+        </div>
+        <div class="system-sub-left system-sub-7 wow bounceIn" data-wow-delay="1.7s">
+            <div class="system-sub-content">
+                <div class="system-sub-title">
+                    观音故里->广德寺
+                </div>
+                <div class="system-sub-text">
+                    <p>一千三百余年来,广德寺历尽沧桑</p>
+                    <p>几度被毁,又数次重建</p>
+                </div>
+            </div>
+            <div class="system-sub-img">
+                <img src="{$Think.server.host_name}__TMPL__/public/assets/images/system_7.png" alt="">
+            </div>
+        </div>
+        <div class="system-sub-right system-sub-8 wow bounceIn" data-wow-delay="1.9s">
+            <div class="system-sub-img">
+                <img src="{$Think.server.host_name}__TMPL__/public/assets/images/system_8.png" alt="">
+            </div>
+            <div class="system-sub-content">
+                <div class="system-sub-title">中华侏罗纪公园
+                </div>
+                <div class="system-sub-text">
+                    <p>国际王牌旅游景区</p>
+                    <p>亚洲一流的国家地质公园</p>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</div>
+<!--学习更多-->
+<!--<div class="more-wrap">
+    <div class="more-container">
+        <div class="more-title wow bounceInLeft" data-wow-delay="0.5s">
+            &lt;!&ndash; 医学警报服务不像其他 &ndash;&gt;
+        </div>
+        <div class="more-text wow bounceInLeft" data-wow-delay="0.7s">
+            &lt;!&ndash; 危险随时发生，急救警报服务，呵护您的生命安全 &ndash;&gt;
+        </div>
+        <div class="more-btn wow bounceInLeft" data-wow-delay="0.9s">
+            <button>
+                <a href="">了解更多</a>
+            </button>
+        </div>
+    </div>
+</div>-->
+<!--整站搜索-->
+<!--底部-->
+<div class="footer-wrap">
+    <div class="footer-container">
+        <div class="nav-footer">
+            <div class="footer-title">
+                公司
+            </div>
+            <div class="nav-footer-list footer-content">
+                <span>
+                    <a href="">产品</a>
+                </span>
+                <span>
+                    <a href="about.html">关于</a>
+                </span>
+                <span>
+                    <a href="">操作步骤</a>
+                </span>
+                <span>
+                    <a href="news.html">最新动态</a>
+                </span>
+                <span>
+                    <a href="buy.html">购买建议</a>
+                </span>
+            </div>
+        </div>
+        <div class="contact-box">
+            <div class="footer-title">
+                联系我们
+            </div>
+            <div class="footer-content">
+                <div>025-8888888</div>
+                <div>sdsxs@139.com</div>
+                <div>xxxxxxxxxxxxxxxxxxxxxx </div>
+            </div>
+            <div class="wechat">
+                <img src="{$Think.server.host_name}__TMPL__/public/assets/images/wechat.png" alt="">
+            </div>
+        </div>
+        <div class="copyright">
+            <strong>&copyxxxxxxxxxxxxxxxxxxxxxx</strong>
+            <span>蜀ICP备17033338</span>
+            <span><a href="#">使用条款</a></span>
+            <span><a href="#">隐私声明</a></span>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="__TMPL__/public/assets/js/vedio.js"></script>
+<script type="text/javascript">
+    new WOW().init();
+</script>
+<!-- /container -->
+<include file="public@scripts"/>
+<script src="__TMPL__/public/assets/js/slippry.min.js"></script>
+<script>
+    $(function () {
+        $("#dosearch").click(function(){
+            //获取图片路径
+            var ordernum = $("#ordernum").val();
+            if(ordernum != ""){
+                window.location.href="{:url('portal/index/search')}?ordernum="+ordernum
+            }
+        })
+        $("#home-slider").slippry({
+            transition: 'fade',
+            useCSS: true,
+            captions: false,
+            speed: 1000,
+            pause: 3000,
+            auto: true,
+            preload: 'visible'
+        });
+        $("#home-slider").show();
+
+        $(".main-user,.main_info").mouseover(function (){
+            $(".main_info").show();
+        }).mouseout(function (){
+            $(".main_info").hide();
+        });
+        $(".main-user").click(function(){
+            $(".main_info").show();
+        });
+    });
+</script>
+<hook name="before_body_end"/>
+</body>
+</html>

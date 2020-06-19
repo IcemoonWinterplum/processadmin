@@ -1,0 +1,120 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('Admin/sys/myorder')}">待完成任务</a></li>
+        <li class="active"><a href="{:url('Admin/sys/finishtask')}">已完成任务</a></li>
+        <li><a href="{:url('Admin/sys/deletetask')}">已取消任务</a></li>
+        <li><a href="{:url('Admin/sys/handlist')}">手工任务</a></li>
+        <li><a href="{:url('Admin/sys/purchaselist')}">采购列表</a></li>
+        <li><a href="/">返回个人中心</a></li>
+    </ul>
+    <form class="well form-inline margin-top-20" method="post" action="{:url('admin/sys/finishtask')}">
+        内部订单号:
+        <input type="text" class="form-control" name="ErpOrderDetailNo" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="内部订单号">
+        开始时间：<input class="form-control js-bootstrap-datetime valid" type="text" name="start_time" value="" aria-invalid="false">
+        结束时间：<input class="form-control js-bootstrap-datetime valid" type="text" name="end_time" value="" aria-invalid="false">
+        <button class="btn btn-primary">搜索</button>
+    </form>
+    <form class="js-ajax-form" method="post">
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="{:lang('DELETE_CONFIRM_MESSAGE')}">{:lang('DELETE')}
+            </button>
+        </div>-->
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <!-- <th width="16">
+                     <label>
+                         <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                     </label>
+                 </th>-->
+                <th width="100">ID</th>
+                <th width="80">流程号</th>
+                <th width="80">内部订单</th>
+                <th width="160">发布时间</th>
+                <th width="160">完成时间</th>
+                <th width="80">类型</th>
+                <th width="80">状态</th>
+                <th width="120">操作</th>
+            </tr>
+            </thead>
+
+            <foreach name="pages" item="vo">
+                <tr>
+                    <!--<td>
+                        <input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]"
+                               value="{$vo.id}">
+                    </td>-->
+                    <td>{$vo.id}</td>
+                    <td>
+                      <!--  <a href="{:url('Admin/sys/processAlltask',['processid'=>$vo['process_id']])}" >-->
+                            {$vo.process_id}
+                      <!--  </a>-->
+                    </td>
+                    <td>{$vo.ErpOrderDetailNo}</td>
+                    <td>{$vo.addtime}</td>
+                    <td>{$vo.finish_time}</td>
+                    <td>
+                        <?php echo $type[$vo['task_type']]?>
+                    </td>
+                    <td>
+                        <!--<eq name="vo.status" value="1">
+                            完成
+                            <else/>
+
+                        </eq>-->
+                        <switch name="vo.status" >
+                            <case value="1" break="1">完成</case>
+                            <case value="0">未处理</case>
+                        </switch>
+                    </td>
+                    <td>{$vo.next_type}
+                            <a class="btn btn-xs btn-primary myordersuer"  href="{:url('admin/sys/orderdetail',array('id'=>$vo['ErpOrderDetailNo'],'taskid'=>$vo['id'],'type'=>'edit'))}">进入</a>
+                    </td>
+                    <!--<td>
+                        <notempty name="vo.post_status">
+                            <a data-toggle="tooltip" title="已发布"><i class="fa fa-check"></i></a>
+                            <else/>
+                            <a data-toggle="tooltip" title="未发布"><i class="fa fa-close"></i></a>
+                        </notempty>
+                    </td>-->
+
+                </tr>
+            </foreach>
+            <tr><td colspan="7"><div class="pagination">{$pages->render()}</div></td><td>总共：{$pages->total()} 条</td></tr>
+        </table>
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="你确定删除吗？">{:lang('DELETE')}
+            </button>
+        </div>-->
+       <!-- <div class="pagination">{$pages->total()}</div>-->
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $(".myordersuer").click(function () {
+        var obj = $(this)
+        var id = $(this).attr("data");
+        $.ajax({
+            type: "POST",
+            url: "{:url('Admin/sys/finishorder')}",
+            data: {id:id},
+            dataType: "json",
+            success: function(data){
+                if (data.code == 200)
+                {
+                    obj.parent().prev().html("完成")
+                }else {
+                    alert(data.msg)
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>

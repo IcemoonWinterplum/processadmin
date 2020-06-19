@@ -1,0 +1,40 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+
+    <form class="well form-inline margin-top-20" method="post" action="{:url('Admin/Sysmanage/salaryCalculation')}">
+        开始时间:
+        <input type="text" class="form-control js-bootstrap-datetime datetimepicker-days" name="start_time" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="">
+        结束时间:
+        <input type="text" class="form-control js-bootstrap-datetime" name="end_time" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="">
+        <button class="btn btn-primary">导出报表</button>
+    </form>
+    <a class="btn" href="{:url('Admin/Sysmanage/salaryCalculation',['export'=>'lastmonth'])}"><button class="btn btn-primary">导出上个月薪资报表</button></a>
+
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $(".myordersuer").click(function () {
+        var obj = $(this)
+        var id = $(this).attr("data");
+        $.ajax({
+            type: "POST",
+            url: "{:url('Admin/sys/finishorder')}",
+            data: {id:id},
+            dataType: "json",
+            success: function(data){
+                if (data.code == 200)
+                {
+                    obj.parent().prev().html("完成")
+                }else {
+                    alert(data.msg)
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>

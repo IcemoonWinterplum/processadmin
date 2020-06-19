@@ -1,0 +1,54 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+
+    <form class="well form-inline margin-top-20" method="post" action="{:url('Admin/sys/commoditylist')}">
+        id:
+        <input type="text" class="form-control " name="Id"
+               style="width: 140px;" autocomplete="off">&nbsp;&nbsp;
+        sku:
+        <input type="text" class="form-control " name="Sku"
+               style="width: 140px;" autocomplete="off">&nbsp;&nbsp;
+        时间:
+        <input type="text" class="form-control js-bootstrap-datetime" name="start_time"
+               value="{$start_time|default=''}"
+               style="width: 140px;" autocomplete="off">-
+        <input type="text" class="form-control js-bootstrap-datetime" name="end_time"
+               value="{$end_time|default=''}"
+               style="width: 140px;" autocomplete="off"> &nbsp; &nbsp;
+        <input type="submit" class="btn btn-primary" value="搜索"/>
+        <a class="btn btn-danger" href="{:url('AdminArticle/index')}">清空</a>
+    </form>
+    <form class="js-ajax-form" action="" method="post">
+
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <th width="50">ID</th>
+                <th width="50">效果图</th>
+                <th>Sku</th>
+                <th>Spu</th>
+                <th></th>
+            </tr>
+            </thead>
+            <volist name='list' id='user'>
+            <tr>
+                <th width="50">{$user.Id}</th>
+                <th width="50"><img src="{$user.Image}" width="80"></th>
+                <th>{$user.Sku}</th>
+                <th>{$user.Spu}</th>
+                <th><a class="btn btn-xs btn-primary" href="{:url('Admin/sys/upcommodity',['commodityid'=>$user['Id']])}">上传资料</a></th>
+            </tr>
+           </volist>
+        </table>
+
+        <ul class="pagination">{$list->render()}</ul>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+
+</script>
+</body>
+</html>

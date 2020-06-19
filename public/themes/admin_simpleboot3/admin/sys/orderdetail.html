@@ -1,0 +1,456 @@
+<include file="public@header"/>
+<style>
+    .bigImg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        /*图片向左移动自身宽度的50%, 向上移动自身高度的50%。*/
+        transform: translate(-50%,-50%);
+    }
+    /*遮罩层*/
+    .opacityBottom {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: rgba(0,0,0,0.8);
+        z-index: 1000;
+        top: 0;
+        left: 0;
+    }
+</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:url('admin/sys/myorder')}">待完成任务</a></li>
+        <li class=""><a href="{:url('Admin/sys/finishtask')}">已完成任务</a></li>
+        <li><a href="{:url('Admin/sys/handlist')}">手工任务</a></li>
+        <li ><a href="{:url('Admin/sys/purchaselist')}">采购列表</a></li>
+        <li><a href="/">返回个人中心</a></li>
+    </ul>
+   <!-- <form class="well form-inline margin-top-20" method="post" action="{:url('AdminPage/index')}">
+        标题:
+        <input type="text" class="form-control" name="keyword" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="请输入关键字">
+        <button class="btn btn-primary">搜索</button>
+    </form>-->
+    <!--<form class="js-ajax-form" method="post">-->
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="{:lang('DELETE_CONFIRM_MESSAGE')}">{:lang('DELETE')}
+            </button>
+        </div>-->
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <th width="100">缩略图</th>
+                <th width="100">ID</th>
+                <th width="100">SKU</th>
+                <th width="100">内部订单</th>
+                <th width="160">备注</th>
+                <th width="160">生产备注</th>
+                <th width="160">数量</th>
+                <th width="160">尺码</th>
+                <th width="160">颜色</th>
+                <th width="160">飞机板</th>
+                <th width="160">跟</th>
+                <th width="160">产品备注</th>
+                <th width="80">类型</th>
+
+            </tr>
+            </thead>
+
+            <foreach name="data" item="vo">
+                <tr>
+
+                    <td>
+                        <foreach name="$vo.Image" item="vi">
+                            <img src="{$vi}" width="80px" class="img" style="float: left">
+                        </foreach>
+                    </td>
+                    <td>{$vo.Id}</td>
+                    <td>
+                       {$vo.CommoditySku}
+                    </td>
+                    <td>{$vo.ErpOrderDetailNo}</td>
+                    <td>{$vo.Remark}</td>
+                    <td>{$vo.ProduceRemark}</td>
+                    <td>{$vo.Quantity}</td>
+                    <td>{$vo.Size}</td>
+                    <td>{$vo.Color}</td>
+                    <td>{$vo.AircraftBoard}</td>
+                    <td>{$vo.HeelNum}</td>
+                    <td>{$vo.Other}</td>
+
+
+                    <td>{$vo.Status}
+                        <!--<eq name="vo.Status" value="1">
+                            完成
+                            <else/>
+
+                        </eq>-->
+                       <!-- <switch name="vo.Status" >
+                            <case value="1" break="1">完成</case>
+                            <case value="0">未处理</case>
+                        </switch>-->
+                    </td>
+                </tr>
+            </foreach>
+
+
+            <thead>
+            <tr>
+                <th width="100">总入库量</th>
+                <th width="100">当前库存</th>
+                <th width="120">面</th>
+                <th width="100">楦</th>
+                <th width="160">底</th>
+                <th width="160">品牌</th>
+                <!--<th width="160">下料价</th>
+                <th width="160">面价</th>-->
+                <th width="160">所属人</th>
+                <th width="160">水台</th>
+                <th width="80">木根</th>
+                <th width="80">通用备注</th>
+            </tr>
+            </thead>
+
+            <foreach name="data" item="vo">
+                <tr>
+                    <td>{$vo.TotalCount}</td>
+                    <td>{$vo.StockCount}</td>
+                    <td>{$vo.Face}</td>
+                    <td>{$vo.ShoeLast}</td>
+                    <td>{$vo.Bottom}</td>
+                    <td>{$vo.BrandName}</td>
+                    <!--<th>{$vo.BaitingPrice}</th>
+                    <td>{$vo.FacePrice}</td>-->
+                    <td>{$vo.BelongPerson}</td>
+                    <td>{$vo.WaterTableModel}</td>
+                    <td>{$vo.WoodHeelModel}</td>
+                    <td>{$product_mark}</td>
+                   <!-- <td>
+                        <if condition=" $vo.Status eq 0 ">
+                            <a class="btn btn-xs btn-primary myordersuer"  href="{:url('admin/sys/orderdetail',array('id'=>$vo['ErpOrderDetailNo']))}">去处理</a>
+
+                        </if>
+
+                    </td>-->
+                </tr>
+            </foreach>
+
+
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="你确定删除吗？">{:lang('DELETE')}
+            </button>
+        </div>-->
+
+                <?php if($task_type == "distributionBlanking" || $task_type == "accessories" || $task_type =="makeFace"){ ?>
+
+                        <?php if($handwork){?>
+                        <foreach name="handwork" item="vo">
+                        <tr><td>
+                        {$vo.handworktype} {$vo.work|default=""}</td>
+                            <td><switch name="$vo.status" >
+                                <case value="1" break="1">已完成</case>
+                                <case value="0">未处理</case>
+                                 </switch>
+                            </td>
+                            <td><a class="btn btn-xs btn-primary " data="{$vo.id}" href="{:url('Admin/sys/handlist',['id'=>$vo.id])}">修改状态</a></td></tr>
+                        </foreach>
+                        <?php }?>
+                        <tr><td>
+                        <input type="radio" name="handworktype"  value="内部手工" >内部手工</td>
+                        <td colspan="3"> <input type="radio" name="handworktype" id="outhandwork" value="外部手工" >外部手工
+                            <select type="text" name="work"  id="" value="" style="display:none">
+                                <option value="油边">油边</option>
+                                <option value="烫钻">烫钻</option>
+                                <option value="打钉">打钉</option>
+                                <option value="采购送出">采购送出</option>
+                                <!--<foreach name="handuser" item="vol">
+                                    <option value="{$vol.id}">{$vol.user_login}-{$vol.user_nickname}</option>
+                                </foreach>-->
+                            </select>
+                        </td>
+                        <td><a class="btn btn-xs btn-primary byhand" id =“byhand” data="{$taskid}">添加手工</a></td>
+                        </tr>
+
+
+
+                <?php }else{ ?>
+                <td>材料位置</td>
+                <td>{$info.info ?? '无材料位置信息'}</td>
+        <!--        <td>{$info.openboard ?? '无开板信息'}</td>-->
+              <!--  <td>材料格式例:<br>楦:位置1;<br>飞机板:位置2; </td>-->
+                <td><?php if($info["openboard"]){ ?><a href="{$info.openboard}">印花号</a><?php }else{echo "无印花号";}?></td>
+                <td><?php if($info["template"]){ ?><a href="{$info.template}">3d文件生成的模板</a><?php }else{echo "无3d文件生成的模板";}?></td>
+                <td><?php if($info["3Dmodel"]){ ?><a href="{$info.3Dmodel}">3D模型</a><?php }else{echo "未上传3D模型";}?> </td>
+                <td><?php if($info["tracing"]){ ?><a href="{$info.tracing}">描版信息/烧花</a><?php }else{echo "未上传描版/烧花";}?> </td>
+                <td><a class="btn btn-xs btn-primary" href="{:url('Admin/sys/upcommodity',['commodityid'=>$data[0]['Id']])}?url=<?php  echo $_SERVER['REQUEST_URI'];?>"><?php if(!$info){ ?>上传资料<?php }else{ ?>编辑上传信息<?php } ?></a></td>
+                <?php } ?>
+            </tr>
+            <tr>
+                <td colspan="4"><textarea  id="others"> </textarea></td>
+                <td><a class="btn btn-xs btn-primary rmark"  data="{$taskid}" >异常备注</a></td>
+            </tr>
+            <?php if($task_type == "distributionBlanking" || $task_type == "midsole"){ ?>
+            <tr>
+               <!-- <td><input type="radio" name="mixedIngredients"  value="1" checked>机器下料</td>
+                <td><input type="radio" name="mixedIngredients"  value="2" >手工下料</td>-->
+               <td colspan="4">
+                   <switch name="task_info.is_purchase" >
+                       <case value="1" break="1">{$task_info.purchase_type}</case>
+                       <case value="2" break="1">{$task_info.purchase_type}已经完成</case>
+                       <case value="0">
+                           <if condition="$task_type == 'midsole'">
+                               <input type="checkbox" class="purchasecd" name="post[{$vo.id}][purchase][]" value="采购">采购 &nbsp;
+                               <else/>
+                               <input type="checkbox" class="purchasecd" name="post[{$vo.id}][purchase][]" value="成都采购">成都采购 &nbsp;
+                               <input type="checkbox"  class="purchasegz" name="post[{$vo.id}][purchase][]" value="广州采购">广州采购
+                           </if>
+
+                       </case>
+
+                   </switch>
+               </td>
+                <td>
+                    <switch name="task_info.is_purchase" >
+                        <case value="1" break="1"><a href="{:url('Admin/sys/purchaselist',['taskid'=>$task_info.id])}" class="btn btn-xs btn-primary "  data="{$task_info.id}" >处理采购</a></case>
+                        <case value="0">
+                            <a class="btn btn-xs btn-primary addpurchase"  data="{$task_info.id}" >添加采购</a>
+                        </case>
+                    </switch>
+                </td>
+            </tr>
+            <?php } ?>
+            <if condition="$task_info.status == 1">
+                <tr>
+                    <td colspan="4"><textarea  id="recall_mark" placeholder="撤回原因"> </textarea></td>
+                    <td><a class="btn btn-xs btn-primary recall"  data="{$taskid}" >申请撤回</a></td>
+                </tr>
+                <else />
+            </if>
+            <tr>
+                <td><a class="btn btn-xs btn-primary myordersuer"  data="{$taskid}" id="myordersuer">完成</a></td>
+                <td><a class=""  data="{$taskid}" href="http://06am.cn/o/{$data[0]['ErpOrderDetailNo']}">图片无法显示点击这里打开原图片地址》</a></td>
+                <td colspan="5"> <?php if($nexttask){ echo  "下一流程：".$nexttask["user_nickname"].'-'.$nexttask["user_login"]; } ?></td>
+            </tr>
+        </table>
+   <!-- </form>-->
+</div>
+
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $(function(){
+        $(".addpurchase").click(function () {
+
+            var obj = $(this).parent().parent();
+            var THIS = $(this);
+            var str = "";
+            if(obj.children().find(".purchasecd").is(':checked')){
+                str += obj.children().find(".purchasecd").val();
+            }
+            if(obj.children().find(".purchasegz").is(':checked')){
+                str +=  str ?','+ obj.children().find(".purchasegz").val() : obj.children().find(".purchasegz").val();
+            }
+            var taskid = $(this).attr("data");
+            if(str == ""){
+                alert("请选择采购类型！")
+                return false
+            }
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/addpurchase')}",
+                data: {purchase_type:str,taskid:taskid},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert("添加采购完成！")
+                        THIS.remove();
+                        window.location.reload()
+                    }else {
+                        alert(data.msg)
+                    }
+                }
+            });
+
+
+        })
+        $(".finishpurchase").click(function () {
+
+            var obj = $(this)
+            var id = obj.attr("data");
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/finishpurchase')}",
+                data: {taskid:id},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert("采购完成！")
+                        obj.remove();
+                    }else {
+                        alert(data.msg)
+                    }
+                }
+            });
+
+
+        })
+        $(".byhand").click(function () {
+            var obj = $(this)
+            var handworktype = $('input:radio[name="handworktype"]:checked').val();
+            var work = $('select[name="work"]').val();
+            var taskid = obj.attr("data");
+            if(!handworktype){
+                alert("请选择手工类型")
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/byhand')}",
+                data: {handworktype:handworktype,taskid:taskid,work:work},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert("添加手工完成！")
+                        window.location.reload()
+                    }else {
+                        alert(data.msg)
+                    }
+                }
+            });
+
+
+        })
+        $(".rmark").click(function () {
+            var obj = $(this)
+            var remark = $("#others").val();
+            var taskid = obj.attr("data");
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/remark')}",
+                data: {remark:remark,taskid:taskid},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert(data.msg)
+                    }else {
+                        alert(data.msg)
+                    }
+                }
+            });
+        })
+        $(".recall").click(function () {
+            var mark = $("#recall_mark").val();
+            var taskid = $(this).attr("data");
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/Sys/recall')}",
+                data: {mark:mark,taskid:taskid},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert(data.msg)
+                    }else {
+                        alert(data.msg)
+                    }
+                }
+            });
+        })
+        $("#outhandwork").click(function () {
+            if($(this).is(":checked")){
+                $(this).parent().find("select").show();
+            }
+        })
+        $(".editbyhand").click(function () {
+
+            var obj = $(this)
+            var handworktype = $('input:radio[name="handworktype"]:checked').val();
+            var work = $('select[name="work"]').val();
+            var taskid = obj.attr("data");
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/editbyhand')}",
+                data: {handworktype:handworktype,id:taskid,work:work},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert("修改手工完成！")
+                    }else {
+                        alert(data.msg)
+                    }
+                }
+            });
+
+
+        })
+        $(".myordersuer").click(function () {
+            var location = ""
+            var obj = $(this)
+            var id = $(this).attr("data");
+            var mixedIngredients =  $('input:radio[name="mixedIngredients"]:checked').val();
+            if(mixedIngredients){
+                data ={id:id,mixedIngredients:mixedIngredients}
+            }else {
+                data ={id:id}
+            }
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/finishorder')}",
+                data: data,
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert(data.msg)
+                        window.location.href="{:url('/admin/sys/myorder')}"
+                    }else {
+                        alert(data.msg)
+                       /* window.location.href="{:url('/admin/sys/myorder')}"*/
+                    }
+                }
+            });
+            /* var text = $("#location").val();
+             if(text != location){
+                 $.ajax({
+                     type: "POST",
+                     url: "{:url('Admin/sys/locationedit')}",
+                     data: {id:"{$data[0]['Id']}",info:text},
+                     dataType: "json",
+                     success: function(data){
+                     }
+                 });
+             }*/
+
+        })
+        $('.img').click(function(){
+            //获取图片路径
+            var imgsrc = $(this).attr("src");
+            console.log(imgsrc);
+            var opacityBottom = '<div class="opacityBottom" style = "display:none"><img class="bigImg" src="' + imgsrc + '"></div>';
+            $(document.body).append(opacityBottom);
+            toBigImg();//变大函数
+        });
+
+    });
+    function toBigImg(){
+        $(".opacityBottom").addClass("opacityBottom");//添加遮罩层
+        $(".opacityBottom").show();
+        $("html,body").addClass("none-scroll");//下层不可滑动
+        $(".bigImg").addClass("bigImg");//添加图片样式
+        $(".opacityBottom").click(function(){
+            $("html,body").removeClass("none-scroll");
+            $(".opacityBottom").remove();
+        });
+    }
+</script>
+</body>
+</html>

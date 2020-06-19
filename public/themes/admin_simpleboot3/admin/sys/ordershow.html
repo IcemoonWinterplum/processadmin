@@ -1,0 +1,77 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+  <!--  <ul class="nav nav-tabs">
+        <li class="active"><a href="{:url('admin/sys/myorder')}">待完成任务</a></li>
+        <li><a href="{:url('admin/sys/finishtask')}">已完成任务</a></li>
+    </ul>-->
+    <!-- <form class="well form-inline margin-top-20" method="post" action="{:url('AdminPage/index')}">
+         标题:
+         <input type="text" class="form-control" name="keyword" style="width: 200px;"
+                value="{$keyword|default=''}" placeholder="请输入关键字">
+         <button class="btn btn-primary">搜索</button>
+     </form>-->
+    <!--<form class="js-ajax-form" method="post">-->
+    <!--<div class="table-actions">
+        <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                data-subcheck="true" data-msg="{:lang('DELETE_CONFIRM_MESSAGE')}">{:lang('DELETE')}
+        </button>
+    </div>-->
+    <table class="table table-hover table-bordered table-list">
+        <thead>
+        <foreach name="data" item="vo">
+        <tr>
+            <th width="100">缩略图</th> <td width="380"><img src="{$vo.Image}" width="180px"></td></tr><tr>
+            <th width="100">ID</th><td>{$vo.Id}</td></tr><tr>
+            <th width="100">SKU</th> <td>{$vo.Sku}</td></tr><tr>
+            <th width="100">内部订单</th> <td>{$vo.ErpOrderDetailNo}</td></tr><tr>
+            <th width="160">备注</th>  <td>{$vo.Remark}</td></tr><tr>
+            <th width="160">尺码</th> <td>{$vo.Size}</td></tr><tr>
+            <th width="160">颜色</th><td>{$vo.Color}</td></tr><tr>
+            <th width="160">飞机板</th> <td>{$vo.AircraftBoard}</td></tr><tr>
+            <th width="160">跟</th><td>{$vo.HeelNum}</td></tr><tr>
+            <th width="160">Other</th> <td>{$vo.Other}</td></tr><tr>
+            <th width="80">类型</th><td>{$vo.Status}
+               <switch name="vo.Status" >
+                     <case value="1" break="1">完成</case>
+                     <case value="0">未处理</case>
+               </switch>
+         </td>
+        </tr>
+        </foreach>
+
+        </tr>
+        </thead>
+
+
+
+        <thead>
+        <foreach name="data" item="vo">
+        <tr>
+            <th width="100">TotalCount</th> <td>{$vo.TotalCount}</td></tr><tr>
+            <th width="100">StockCount</th> <td>{$vo.StockCount}</td></tr><tr>
+            <th width="120">面</th> <td>{$vo.Face}</td></tr><tr>
+            <th width="100">楦</th> <td>{$vo.ShoeLast}</td></tr><tr>
+            <th width="160">底</th>  <td>{$vo.Bottom}</td></tr><tr>
+            <th width="160">品牌</th>  <td>{$vo.BrandName}</td></tr><tr>
+            <th width="160">BaitingPrice</th><th>{$vo.BaitingPrice}</th></tr><tr>
+            <th width="160">FacePrice</th>   <td>{$vo.FacePrice}</td></tr><tr>
+            <th width="160">BelongPerson</th>   <td>{$vo.BelongPerson}</td></tr><tr>
+            <th width="160">WaterTableModel</th> <td>{$vo.WaterTableModel}</td></tr><tr>
+            <th width="80">WoodHeelModel</th> <td>{$vo.WoodHeelModel}</td>
+        </tr>
+        </foreach>
+        </thead>
+       <!-- <tr><td><a class="btn btn-xs btn-primary myordersuer"  data="" id="myordersuer">完成</a></td></tr>-->
+    </table>
+    <!-- </form>-->
+</div>
+
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+
+
+</script>
+</body>
+</html>

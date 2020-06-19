@@ -1,0 +1,218 @@
+<include file="public@header"/>
+<style>
+    .bigImg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        /*图片向左移动自身宽度的50%, 向上移动自身高度的50%。*/
+        transform: translate(-50%,-50%);
+    }
+    /*遮罩层*/
+    .opacityBottom {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: rgba(0,0,0,0.8);
+        z-index: 1000;
+        top: 0;
+        left: 0;
+    }
+</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:url('admin/sys/myorder')}">待完成任务</a></li>
+        <li><a href="{:url('admin/sys/finishtask')}">已完成任务</a></li>
+    </ul>
+    <!-- <form class="well form-inline margin-top-20" method="post" action="{:url('AdminPage/index')}">
+         标题:
+         <input type="text" class="form-control" name="keyword" style="width: 200px;"
+                value="{$keyword|default=''}" placeholder="请输入关键字">
+         <button class="btn btn-primary">搜索</button>
+     </form>-->
+    <!--<form class="js-ajax-form" method="post">-->
+    <!--<div class="table-actions">
+        <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                data-subcheck="true" data-msg="{:lang('DELETE_CONFIRM_MESSAGE')}">{:lang('DELETE')}
+        </button>
+    </div>-->
+    <table class="table table-hover table-bordered table-list">
+        <thead>
+        <tr>
+            <th width="100">缩略图</th>
+            <th width="100">ID</th>
+            <th width="100">SKU</th>
+            <th width="100">内部订单</th>
+            <th width="160">备注</th>
+            <th width="160">尺码</th>
+            <th width="160">颜色</th>
+            <th width="160">飞机板</th>
+            <th width="160">跟</th>
+            <th width="160">Other</th>
+            <th width="80">类型</th>
+
+        </tr>
+        </thead>
+
+        <foreach name="data" item="vo">
+            <tr>
+
+                <td><foreach name="$vo.Image" item="vi">
+                    <img src="{$vi}" width="80px" class="img" style="float: left">
+                </foreach></td>
+                <td>{$vo.Id}</td>
+                <td>
+                    {$vo.CommoditySku}
+                </td>
+                <td>{$vo.ErpOrderDetailNo}</td>
+                <td>{$vo.Remark}</td>
+
+                <td>{$vo.Size}</td>
+                <td>{$vo.Color}</td>
+                <td>{$vo.AircraftBoard}</td>
+                <td>{$vo.HeelNum}</td>
+                <td>{$vo.Other}</td>
+
+
+                <td>{$vo.Status}
+                    <!--<eq name="vo.Status" value="1">
+                        完成
+                        <else/>
+
+                    </eq>-->
+                    <!-- <switch name="vo.Status" >
+                         <case value="1" break="1">完成</case>
+                         <case value="0">未处理</case>
+                     </switch>-->
+                </td>
+            </tr>
+        </foreach>
+
+
+        <thead>
+        <tr>
+            <th width="100">总入库量</th>
+            <th width="100">当前库存</th>
+            <th width="120">面</th>
+            <th width="100">楦</th>
+            <th width="160">底</th>
+            <th width="160">品牌</th>
+            <th width="160">下料价</th>
+            <th width="160">面价</th>
+            <th width="160">所属人</th>
+            <th width="160">水台</th>
+            <th width="80">木根</th>
+        </tr>
+        </thead>
+
+        <foreach name="data" item="vo">
+            <tr>
+                <td>{$vo.TotalCount}</td>
+                <td>{$vo.StockCount}</td>
+                <td>{$vo.Face}</td>
+                <td>{$vo.ShoeLast}</td>
+                <td>{$vo.Bottom}</td>
+                <td>{$vo.BrandName}</td>
+                <th>{$vo.BaitingPrice}</th>
+                <td>{$vo.FacePrice}</td>
+                <td>{$vo.BelongPerson}</td>
+                <td>{$vo.WaterTableModel}</td>
+                <td>{$vo.WoodHeelModel}</td>
+                <!-- <td>
+                     <if condition=" $vo.Status eq 0 ">
+                         <a class="btn btn-xs btn-primary myordersuer"  href="{:url('admin/sys/orderdetail',array('id'=>$vo['ErpOrderDetailNo']))}">去处理</a>
+
+                     </if>
+
+                 </td>-->
+            </tr>
+        </foreach>
+
+
+        <!--<div class="table-actions">
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                    data-subcheck="true" data-msg="你确定删除吗？">{:lang('DELETE')}
+            </button>
+        </div>-->
+        <tr>
+            <td>材料位置</td>
+            <td><input type="checkbox" id="threeD" name="threeD" value="1">3D</td>
+            <td><input type="checkbox"  id="last" name="last" value="1">开楦</td>
+            <!--  <td>材料格式例:<br>楦:位置1;<br>飞机板:位置2; </td>-->
+            <!--<td><input type="radio"  id="outsole" name="outsole" value="1">做大底</td>
+            <td><input type="radio"  id="midsole" name="midsole" value="1">做中底 </td>-->
+        </tr>
+        <tr><td><a class="btn btn-xs btn-primary myordersuer"  data="{$taskid}" id="myordersuer">完成</a></td></tr>
+    </table>
+    <!-- </form>-->
+</div>
+
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $(function() {
+        $(".myordersuer").click(function () {
+            var location = ""
+            var obj = $(this)
+            var threeD = 0;
+            var last = 0;
+            if($('#threeD').is(':checked')){
+                threeD = 1;
+            }
+            if($('#last').is(':checked')){
+                last = 1;
+            }
+            var id = $(this).attr("data");
+            $.ajax({
+                type: "POST",
+                url: "{:url('Admin/sys/finishorder')}",
+                data: {id:id,threeD:threeD,last:last},
+                dataType: "json",
+                success: function(data){
+                    if (data.code == 200)
+                    {
+                        alert("任务完成！")
+                        window.location.href="{:url('/admin/sys/myorder')}"
+                    }else {
+                        alert(data.msg)
+                        return false;
+                        window.location.href="{:url('/admin/sys/myorder')}"
+                    }
+                }
+            });
+            /* var text = $("#location").val();
+             if(text != location){
+                 $.ajax({
+                     type: "POST",
+                     url: "{:url('Admin/sys/locationedit')}",
+                     data: {id:"{$data[0]['Id']}",info:text},
+                     dataType: "json",
+                     success: function(data){
+                     }
+                 });
+             }*/
+
+        })
+        $('.img').click(function(){
+            //获取图片路径
+            var imgsrc = $(this).attr("src");
+            console.log(imgsrc);
+            var opacityBottom = '<div class="opacityBottom" style = "display:none"><img class="bigImg" src="' + imgsrc + '"></div>';
+            $(document.body).append(opacityBottom);
+            toBigImg();//变大函数
+        });
+
+    });
+    function toBigImg(){
+        $(".opacityBottom").addClass("opacityBottom");//添加遮罩层
+        $(".opacityBottom").show();
+        $("html,body").addClass("none-scroll");//下层不可滑动
+        $(".bigImg").addClass("bigImg");//添加图片样式
+        $(".opacityBottom").click(function(){
+            $("html,body").removeClass("none-scroll");
+            $(".opacityBottom").remove();
+        });
+    }
+</script>
+</body>
+</html>

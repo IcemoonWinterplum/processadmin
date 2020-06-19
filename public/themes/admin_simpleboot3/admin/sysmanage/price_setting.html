@@ -1,0 +1,140 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:url('admin/sysmanage/priceSetting')}">设置价格</a></li>
+
+    </ul>
+    <form class="js-ajax-form" action="{:url('admin/sysmanage/priceSetting')}" method="post">
+
+        <table class="table table-hover table-bordered table-list">
+
+
+            <tr>
+                <th width="150">{$gropname.examinePaper}</th>
+                <th><input type="number" name="post[examinePaper]" value="{$setting.examinePaper}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="250">{$gropname.openboard}</th>
+                <th><input type="number" name="post[openboard]" value="{$setting.openboard}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.tracing}</th>
+                <th><input type="number" name="post[tracing]" value="{$setting.tracing}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.distributionBlanking}</th>
+                <th><input type="number" name="post[distributionBlanking]" value="{$setting.distributionBlanking}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.accessories}</th>
+                <th><input type="number" name="post[accessories]" value="{$setting.accessories}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.makeFace}</th>
+                <th><input type="number" name="post[makeFace]" value="{$setting.makeFace}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.examinePaperbottom}</th>
+                <th><input type="number" name="post[examinePaperbottom]" value="{$setting.examinePaperbottom}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.threeD}</th>
+                <th><input type="number" name="post[threeD]" value="{$setting.threeD}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.last}</th>
+                <th><input type="number" name="post[last]" value="{$setting.last}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.outsole}</th>
+                <th><input type="number" name="post[outsole]" value="{$setting.outsole}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.midsole}</th>
+                <th><input type="number" name="post[midsole]" value="{$setting.midsole}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.totalmixedIngredients}</th>
+                <th><input type="number" name="post[totalmixedIngredients]" value="{$setting.totalmixedIngredients}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.makeBottom}</th>
+                <th><input type="text" name="post[makeBottom]" value="{$setting.makeBottom}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.drill}</th>
+                <th><input type="number" name="post[drill]" value="{$setting.drill}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.stickingPad}</th>
+                <th><input type="number" name="post[stickingPad]" value="{$setting.stickingPad}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.inspection}</th>
+                <th><input type="number" name="post[inspection]" value="{$setting.inspection}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.packing}</th>
+                <th><input type="number" name="post[packing]" value="{$setting.packing}">&nbsp;元</th>
+            </tr>
+            <tr>
+                <th width="50">{$gropname.deliver}</th>
+                <th><input type="number" name="post[deliver]" value="{$setting.deliver}">&nbsp;元</th>
+            </tr>
+
+            <tr>
+                <th colspan="2"><input class="btn btn-xs btn-primary" type="submit" value="确定"></th>
+            </tr>
+        </table>
+
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $(".sure").click(function () {
+        var obj = $(this)
+        var id = $(this).attr("data");
+        var taskid = obj.parent().find(".taskid").val()
+        $.ajax({
+            type: "POST",
+            url: "{:url('Admin/Sysmanage/doprocessTaskBack')}",
+            data: {id:id,status:1,taskid:taskid},
+            dataType: "json",
+            success: function(data){
+                if (data.code == 200)
+                {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }else {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }
+            }
+        });
+    })
+    $(".Reject").click(function () {
+        var obj = $(this)
+        var id = $(this).attr("data");
+        var taskid = obj.parent().find(".taskid").val()
+        $.ajax({
+            type: "POST",
+            url: "{:url('Admin/Sysmanage/doprocessTaskBack')}",
+            data: {id:id,status:2,taskid:taskid},
+            dataType: "json",
+            success: function(data){
+                if (data.code == 200)
+                {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }else {
+                    alert(data.msg)
+                    obj.parent().parent().remove();
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<div class="wrap">
+    <div class="comm-container nav-container">
+        <div class="logo">
+            <a href="/"><img src="{$Think.server.host_name}__TMPL__/public/assets/images/logo.png" alt=""></a>
+        </div>
+        <ul>
+            <!--<li>
+                <a href="/">遂宁风光</a>
+            </li>
+            <li>
+                <a href="/">遂州人家</a>
+            </li>
+            <li>
+                <a href="{:cmf_url('portal/food/alllist')}">遂州美食</a>
+            </li>
+            <li>
+                <a href="{:cmf_url('portal/article/travels')}">遂州游记</a>
+            </li>-->
+        </ul>
+        <div class="search-top" style="float: right;margin-top:25px">
+            <?php if (cmf_is_user_login()){ ?>
+            <!--<div><a href="{:cmf_url('user/profile/center')}">个人中心</a> </div>-->
+            <li class="dropdown user login">
+                <a class="dropdown-toggle user main-user" data-toggle="dropdown" href="#">
+                    <php>$user=cmf_get_current_user();</php>
+                    <if condition="empty($user['avatar'])">
+                        <img src="__TMPL__/public/assets/images/headicon.png" class="headicon">
+                        <else/>
+                        <img src="{:cmf_get_user_avatar_url($user['avatar'])}" class="headicon" width="30"/>
+                    </if>
+                    <span class="user-nickname"></span><b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu pull-right main_info" style="display: none;">
+                    <li><a href="{:cmf_url('user/Profile/center')}"><i class="fa fa-home"></i> &nbsp;个人中心</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{:cmf_url('user/Index/logout')}"><i class="fa fa-sign-out"></i> &nbsp;退出</a></li>
+                </ul>
+            </li>
+            <?php } else{ ?>
+            <div><a href="{:cmf_url('user/login/regist')}">注册</a> | <a  href="{:cmf_url('user/login/index')}">登录</a> </div>
+            <?php }?>
+        </div>
+        <!--<div class="search-show">
+            <input type="text" placeholder="请输入关键字">
+            <img src="{$Think.server.host_name}__TMPL__/public/assets/images/search.png" alt="" class="search-show-search">
+            <img src="{$Think.server.host_name}__TMPL__/public/assets/images/close.png" alt="" class="search-show-close">
+        </div>-->
+
+    </div>
+</div>
