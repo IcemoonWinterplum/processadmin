@@ -1,6 +1,3 @@
-ThinkCMF 5.0.190111 正式版
-===============
-
 
 
 ### 环境推荐
@@ -26,8 +23,14 @@ ThinkCMF 5.0.190111 正式版
 ThinkCMF5 API :https://github.com/thinkcmf/thinkcmfapi
 
 ### 完整版目录结构
-```
-thinkcmf  根目录
+
+基于ThinkCMF 5.0.190111 正式版
+
+
+
+####################
+
+  根目录
 ├─api                   api目录(核心版不带)
 ├─app                   应用目录
 │  ├─portal             门户应用目录
