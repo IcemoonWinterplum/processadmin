@@ -1,3 +1,4 @@
+
 基于ThinkCMF 5.0.190111 正式版
 
   根目录
@@ -41,7 +42,5 @@
 ├─LICENSE.txt           授权说明文件
 ├─README.md             README 文件
 ├─think                 命令行入口文件
-```
-
 
 
